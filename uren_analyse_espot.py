@@ -1,5 +1,6 @@
 import numpy as np
 import json
+import datetime
 
 # Functie om de prijzen uit een JSON-bestand te laden
 def laad_prijzen(dag="today"):
@@ -55,19 +56,42 @@ def verwerk_prijzen(dag="today"):
     prijzen_dict = laad_prijzen(dag)  
     if not prijzen_dict:
         return  # Stop de functie als er geen prijzen beschikbaar zijn
+    if dag == "today":
+        print("\nPrijsoverzicht voor ",datetime.date.today(),":")
+    else:
+        print("\nPrijsoverzicht voor ", datetime.date.today() + datetime.timedelta(days=1) ,":")
+    
+    blok_1_resultaat = ""
+    blok_2_resultaat = ""
+    blok_3_resultaat = ""
 
     # Voor blokken van 1, 2 en 3 uur de beste uren berekenen en afdrukken
     for n in [1, 2, 3]:
         # Verkrijg de beste start en eind tijd, het laagste gemiddelde, en de laagste prijs voor het blok van n uren
         beste_start, beste_eind, laagste_gemiddelde, laagste_prijs = laagste_verbruik_uren(prijzen_dict, n)  
-        print(f"\nPrijsoverzicht voor {dag.capitalize()}:")
         
         # Als een geldig blok is gevonden, print de resultaten
         if beste_start is not None:
-            # Voor het blok, bereken het einduur, zorg ervoor dat het correct doorloopt van 23:00 naar 00:00
             eind_uur = beste_eind % 24
-            print(f"Beste blok van {n} uur(en): {beste_start}:00 - {eind_uur}:00")
-            print(f"  - Gemiddelde werkelijke prijs: {laagste_prijs:.2f} €/MWh")  # Print de gemiddelde prijs per uur voor het blok
+            tekst = f"Beste blok van {n} uur(en): {beste_start}:00 - {eind_uur}:00\n"
+            tekst += f"  - Gemiddelde werkelijke prijs: {laagste_prijs:.2f} €/MWh\n"
+
+            # Sla de tekst op in de juiste variabele afhankelijk van het blok
+            if n == 1:
+                blok_1_resultaat = tekst
+            elif n == 2:
+                blok_2_resultaat = tekst
+            elif n == 3:
+                blok_3_resultaat = tekst
+    # Print de resultaten van de drie blokken    
+    if blok_1_resultaat:
+        print(blok_1_resultaat)
+    
+    if blok_2_resultaat:
+        print(blok_2_resultaat)
+    
+    if blok_3_resultaat:
+        print(blok_3_resultaat)
 
     # Bereken de gemiddelde prijs voor de dag
     gemiddelde_prijs = np.mean(list(prijzen_dict.values()))
