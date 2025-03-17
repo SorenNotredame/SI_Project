@@ -6,7 +6,7 @@ import datetime
 def laad_prijzen(dag="today"):
     try:
         # Open het JSON-bestand en laad de inhoud als een Python-dictionary
-        with open("SI_Project/prices_per_hour.json", "r") as file:
+        with open("prices_per_hour.json", "r") as file:
             data = json.load(file)  # JSON inladen als dictionary
 
         # Haal de data voor de opgegeven dag ('today' of 'tomorrow')
