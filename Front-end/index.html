@@ -125,11 +125,14 @@
             <div class="bg-card">
                 <h3 class="text-center">🔌 Energieadvies voor vandaag</h3>
                 <ul class="list-group">
-                    <li class="list-group-item text-warning">🥇 <strong>Gouden uur:</strong> <span class="goedkoop">{{ beste_uur_vandaag }}</span>
+                    <li class="list-group-item text-warning">
+                        🥇 <strong>Gouden uur:</strong> <span id="beste_uur_vandaag" class="goedkoop"></span>
                     </li>
-                    <li class="list-group-item">2️⃣ <strong>Beste 2 uur blok:</strong> <span class="goedkoop">{{ beste_twee_uur_vandaag }}</span>
+                    <li class="list-group-item">
+                        2️⃣ <strong>Beste 2 uur blok:</strong> <span id="beste_twee_uur_vandaag" class="goedkoop"></span>
                     </li>
-                    <li class="list-group-item">3️⃣ <strong>Beste 3 uur blok:</strong> <span class="goedkoop">{{ beste_drie_uur_vandaag }}</span>
+                    <li class="list-group-item">
+                        3️⃣ <strong>Beste 3 uur blok:</strong> <span id="beste_drie_uur_vandaag" class="goedkoop"></span>
                     </li>
                 </ul>
             </div>
@@ -142,11 +145,14 @@
             <div class="bg-card">
                 <h3 class="text-center">🔌 Energieadvies voor morgen</h3>
                 <ul class="list-group">
-                    <li class="list-group-item text-warning">🥇 <strong>Gouden uur:</strong> <span class="goedkoop">{{ beste_uur_morgen }}</span>
+                    <li class="list-group-item text-warning">
+                        🥇 <strong>Gouden uur:</strong> <span id="beste_uur_morgen" class="goedkoop"></span>
                     </li>
-                    <li class="list-group-item">2️⃣ <strong>Beste 2 uur blok:</strong> <span class="goedkoop">{{ beste_twee_uur_morgen }}</span>
+                    <li class="list-group-item">
+                        2️⃣ <strong>Beste 2 uur blok:</strong> <span id="beste_twee_uur_morgen" class="goedkoop"></span>
                     </li>
-                    <li class="list-group-item">3️⃣ <strong>Beste 3 uur blok:</strong> <span class="goedkoop">{{ beste_drie_uur_morgen }}</span>
+                    <li class="list-group-item">
+                        3️⃣ <strong>Beste 3 uur blok:</strong> <span id="beste_drie_uur_morgen" class="goedkoop"></span>
                     </li>
                 </ul>
             </div>
@@ -184,5 +190,7 @@
 
 <script src="js/bootstrap.bundle.min.js"></script>
 <script src="js/js.js"></script>
+<script src="js/energieprijzen.js"></script>
+
 </body>
 </html>
