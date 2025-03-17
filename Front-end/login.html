@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - EnergIQ</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body class="d-flex justify-content-center align-items-center vh-100">
+<div class="login-container text-center p-4 shadow rounded">
+    <h2 class="mb-4">🔒 Inloggen bij EnergIQ</h2>
+    <div id="error-message" class="text-danger mb-3" style="display: none;"></div>
+
+    <!-- Login form -->
+    <form id="loginForm">
+        <div class="mb-3">
+            <input type="text" id="username" class="form-control" placeholder="Gebruikersnaam" required>
+        </div>
+        <div class="mb-3">
+            <input type="password" id="password" class="form-control" placeholder="Wachtwoord" required>
+        </div>
+        <button type="submit" class="btn btn-success w-100">Inloggen</button>
+    </form>
+</div>
+
+<script>
+    // Voorbeeld gebruikers voor demo
+    const validUsers = {
+        "admin": "1234",
+        "Tom": "1234"
+    };
+
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        // Controleer of de gebruikersnaam en wachtwoord overeenkomen
+        if (validUsers[username] && validUsers[username] === password) {
+            // Zet inlogstatus in localStorage
+            localStorage.setItem("loggedIn", "true");
+
+            // Redirect naar index.html
+            window.location.href = "index.html";
+        } else {
+            // Toon foutmelding als de login niet klopt
+            document.getElementById('error-message').innerText = '❌ Verkeerde gebruikersnaam of wachtwoord';
+            document.getElementById('error-message').style.display = 'block';
+        }
+    });
+</script>
+</body>
+</html>
