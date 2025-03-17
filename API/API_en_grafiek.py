@@ -22,7 +22,9 @@ def verwijder_bestand(bestandsnaam):
         os.remove(bestandsnaam)
 
 # Oude bestanden verwijderen
-verwijder_bestand("energieprijzen.json")
+verwijder_bestand("/var/www/html/energieprijzen.json")
+verwijder_bestand("/var/www/html/assets/energieprijzen_vandaag.png")
+verwijder_bestand("/var/www/html/assets/energieprijzen_morgen.png")
 
 try:
     # Day-ahead prijzen ophalen
@@ -91,7 +93,7 @@ try:
     }
 
     # JSON opslaan
-    with open("energieprijzen.json", "w", encoding="utf-8") as json_file:
+    with open("/var/www/html/energieprijzen.json", "w", encoding="utf-8") as json_file:
         json.dump(energieprijzen_data, json_file, indent=4, ensure_ascii=False)
 
     print("✅ JSON-bestand 'energieprijzen.json' gegenereerd.")
@@ -107,16 +109,17 @@ try:
         plt.title(titel)
         plt.grid(True, linestyle='--', alpha=0.7)
         plt.savefig(bestandsnaam)
+        plt.close()  # Zorgt ervoor dat matplotlib geen geheugen ophoopt
 
 
     # Grafiek voor vandaag
-    plot_prijzen(prijzen_vandaag, "Energieprijzen Vandaag", "energieprijzen_vandaag.png")
-    print("Grafiek voor vandaag opgeslagen als 'energieprijzen_vandaag.png'")
+    plot_prijzen(prijzen_vandaag, "Energieprijzen Vandaag", "/var/www/html/assets/energieprijzen_vandaag.png")
+    print("📊 Grafiek voor vandaag opgeslagen als 'energieprijzen_vandaag.png'")
 
     # Grafiek voor morgen (indien beschikbaar)
     if not prijzen_morgen.empty:
-        plot_prijzen(prijzen_morgen, "Energieprijzen Morgen", "energieprijzen_morgen.png")
-        print("Grafiek voor morgen opgeslagen als 'energieprijzen_morgen.png'")
+        plot_prijzen(prijzen_morgen, "Energieprijzen Morgen", "/var/www/html/assets/energieprijzen_morgen.png")
+        print("📊 Grafiek voor morgen opgeslagen als 'energieprijzen_morgen.png'")
 
 except Exception as e:
     print(f"⚠️ Er is een fout opgetreden: {e}")
