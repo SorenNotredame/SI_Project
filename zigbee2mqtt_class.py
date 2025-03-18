@@ -51,5 +51,5 @@ zigbee_controller.subscribe_to_power_consumption(device_id)  # Subscribe to powe
 while True:
 
     # Access the power consumption value
-    t.sleep(2)  # Wait for the message to be received
+    t.sleep(10)  # Wait for the message to be received
     print(f"Power consumption for {device_id}: {zigbee_controller.power_consumption.get(device_id)}W")
