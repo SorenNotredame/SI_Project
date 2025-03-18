@@ -18,7 +18,7 @@ import os
 clear = lambda: os.system('clear')
 
 # Change your serial port here:
-serialport = '/dev/ttyUSB1'
+serialport = '/dev/ttyUSB0'
 
 # Enable debug if needed:
 debug = False
