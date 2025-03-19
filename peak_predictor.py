@@ -44,7 +44,8 @@ def main():
             # Lees en verwerk de vermogenswaarde
             value = read_p1_value()
             if value:
-                samples.append(value)  # Voeg de waarde toe aan de lijst
+                value_in_watts = value * 1000  # Converteer van kW naar W
+                samples.append(value_in_watts)  # Voeg de waarde in Watt toe aan de lijst
                 average_power = calculate_average_power()  # Bereken het gemiddelde vermogen
                 update_device_status(average_power)  # Werk de status van de apparaten bij
                 print(f"Current Average Power: {average_power:.2f} W")
