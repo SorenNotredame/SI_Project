@@ -28,6 +28,26 @@ function updateKwartiervermogen(value) {
         }
     }
 
+    // Functie om info door te geven aan Falsk
+    function send_info() {
+        data = {"kwartiervermorgen_gewenst": document.getElementById("kwartiervermogen-waarde").innerHTML,
+                "a": document.getElementById("switch-a").checked,
+                "b": document.getElementById("switch-b").checked,
+                "c": document.getElementById("switch-c").checked}
+
+        console.log(data)
+        fetch(`http://127.0.0.1:5000/data`, {
+            method: "POST",
+            mode: "cors",
+            credentials: "include",
+            body: JSON.stringify(data),
+            cache: "no-cache",
+            headers: new Headers({
+              "content-type": "application/json"
+            })
+          })
+    }
+
     // Functie om de schakelaar en lampje te updaten
     function toggleDevice(type) {
         let switchElement = document.getElementById(`switch-${type}`);
@@ -51,6 +71,8 @@ function logout() {
 
     // Bij het laden van de pagina de statussen ophalen
     document.addEventListener("DOMContentLoaded", updateDeviceStatus);
+
+
 
 
 
