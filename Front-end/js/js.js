@@ -35,11 +35,11 @@ function updateKwartiervermogen(value) {
         let statusText = document.getElementById(`text-${type}`);
 
         if (switchElement.checked) {
-            statusLight.style.backgroundColor = "green"; // AAN
-            statusText.innerText = "Aan";
+            
+            statusText.innerText = "Manuele mode ON";
         } else {
-            statusLight.style.backgroundColor = "red"; // UIT
-            statusText.innerText = "Uit";
+            
+            statusText.innerText = "Manuele mode OFF ";
         }
     }
 
