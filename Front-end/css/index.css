@@ -1,3 +1,12 @@
+:root {
+
+    --color-body-accordion: #d5d5d0;
+    --color-body-accordion-active: #d1d1d1;
+    --color-body-accordion-item: #ffffff;
+
+}
+
+
 /* Algemene stijlen */
 body {
     background-image: url("../assets/background.jpg");
@@ -188,6 +197,22 @@ input[type="range"]:focus::-webkit-slider-runnable-track {
     background: linear-gradient(to right, #28a745 0%, #28a745 var(--slider-value, 50%), #ddd 0%);
 }
 
+.accordion {
+    --bs-accordion-bg: var(--color-body-accordion);
+    --bs-accordion-btn-focus-border-color: var(--color-body-accordion-active);
+    --bs-accordion-btn-focus-box-shadow: 0 0 0 0.25rem rgb(189, 189, 189);
+    --bs-accordion-active-color: var(--color-secondText);
+    --bs-accordion-active-bg: var(--color-body-accordion-active);
+}
+
+.accordion-item {
+    background-color: var(--color-body-accordion-item);
+    border: var(--bs-accordion-border-width) solid var(--bs-accordion-border-color);
+}
+
+.accordion-item ul li, .accordion-item ol li{
+    margin-bottom: 10px;
+}
 
 /* Extra padding voor mobiele schermen */
 @media (max-width: 992px) { /* Bootstrap's breakpoint voor tablets/mobiel */
