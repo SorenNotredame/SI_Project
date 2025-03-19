@@ -33,8 +33,9 @@ def add_sample(value):
         minute_average = sum(samples) / len(samples)
         minute_averages.append(minute_average)
         samples.clear()
+    if minute_averages:
         current_cycle_power = sum(minute_averages) / len(minute_averages)
-        update_device_status()
+    update_device_status()
 
 def get_status():
     return current_cycle_power, CTurnOff, ATurnOff, BTurnOff
