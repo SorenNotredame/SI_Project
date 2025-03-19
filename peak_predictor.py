@@ -9,6 +9,7 @@ MINUTES = 15  # Aantal minuten voor gemiddelde berekening
 
 # Variables to track the state
 samples = []
+minute_averages = []
 current_cycle_power = 0
 CTurnOff = False
 ATurnOff = False
@@ -28,14 +29,18 @@ def update_device_status():
 def add_sample(value):
     global samples, current_cycle_power
     samples.append(value)
-    current_cycle_power = sum(samples) / len(samples)
-    update_device_status()
+    if len(samples) == SAMPLES_PER_MINUTE:
+        minute_average = sum(samples) / len(samples)
+        minute_averages.append(minute_average)
+        samples.clear()
+        current_cycle_power = sum(minute_averages) / len(minute_averages)
+        update_device_status()
 
 def get_status():
     return current_cycle_power, CTurnOff, ATurnOff, BTurnOff
 
 def main():
-    global samples
+    global samples, minute_averages
     # Calculate the next 15-minute interval
     now = datetime.now()
     next_cycle = (now + timedelta(minutes=15 - now.minute % 15)).replace(second=0, microsecond=0)
@@ -46,6 +51,7 @@ def main():
             if datetime.now() >= next_cycle:
                 print(f"Starting new cycle at {next_cycle.strftime('%H:%M:%S')}")
                 samples = []  # Reset samples for the new cycle
+                minute_averages = []  # Reset minute averages for the new cycle
                 next_cycle += timedelta(minutes=15)  # Schedule the next cycle
 
             # Read and process the power value
