@@ -33,7 +33,7 @@
                     <li class="nav-item"><a class="nav-link" href="#apparaten">Apparaten</a></li>
                     <li class="nav-item"><a class="nav-link" href="#energieprijzen">Energieprijzen</a></li>
                     <li class="nav-item">
-                        <a class="nav-link text-danger" href="#" onclick="logout()">Uitloggen</a>
+                        <a class="nav-link text-danger" href="#" onclick="logout()"><i class="fa-solid fa-key"></i> Uitloggen</a>
                     </li>
 
 
@@ -63,17 +63,19 @@
 
             <!-- Hoogste kwartiervermogen -->
             <div class="col-md-4 text-center">
-                <h2 class="text-dark mb-3">Hoogste Kwartiervermogen</h2>
+                <h2 class="text-dark mb-3">Hoogste Kwartierpiek deze maand</h2>
                 <div class="bg-card p-3">
                     <h3 class="text-warning">⚡ <span id="hoogste-kwartiervermogen">7500</span> Watt</h3>
-                    <p class="text-white">Deze week</p>
+                    
                 </div>
             </div>
         </div>
     </section>
 
     <section id="apparaten" class="container mt-5">
-        <h2 class="text-dark text-center mb-4">🔌 Apparatenbeheer</h2>
+        <h2 class="text-dark text-center mb-2"><i class="fa-solid fa-plug"></i> Apparatenbeheer</h2>
+        <p class="text-dark text-center"><i class="fa-solid fa-toggle-on"></i> met de schuifknop kan je bepalen of een apparaat altijd aanstaat</p>
+        <p class="text-dark text-center mb-4">De statusindicator in de bovenhoek geeft aan of het apparaat is in- of uitgeschakeld voor optimaal verbruik. Wanneer de schuifknop is geactiveerd, wordt de beslissing van het slimme systeem genegeerd.</p>
         <div class="row justify-content-center">
 
             <!-- Type A -->
@@ -123,16 +125,16 @@
         <!-- Energieadvies Vandaag -->
         <div class="col-md-6">
             <div class="bg-card">
-                <h3 class="text-center">🔌 Energieadvies voor vandaag</h3>
+                <h3 class="text-center"><i class="fa-solid fa-plug"></i> Energieadvies voor vandaag</h3>
                 <ul class="list-group">
                     <li class="list-group-item text-warning">
-                        🥇 <strong>Gouden uur:</strong> <span id="beste_uur_vandaag" class="goedkoop"></span>
+                        <i class="fa-solid fa-medal"></i> <strong>Gouden uur:</strong> <span id="beste_uur_vandaag" class="goedkoop"></span>
                     </li>
                     <li class="list-group-item">
-                        2️⃣ <strong>Beste 2 uur blok:</strong> <span id="beste_twee_uur_vandaag" class="goedkoop"></span>
+                         <strong>Beste <i class="fa-solid fa-2"></i> uur blok:</strong> <span id="beste_twee_uur_vandaag" class="goedkoop"></span>
                     </li>
                     <li class="list-group-item">
-                        3️⃣ <strong>Beste 3 uur blok:</strong> <span id="beste_drie_uur_vandaag" class="goedkoop"></span>
+                         <strong>Beste <i class="fa-solid fa-3"></i> uur blok:</strong> <span id="beste_drie_uur_vandaag" class="goedkoop"></span>
                     </li>
                 </ul>
             </div>
@@ -143,16 +145,16 @@
         <!-- Energieadvies Morgen -->
         <div class="col-md-6">
             <div class="bg-card">
-                <h3 class="text-center">🔌 Energieadvies voor morgen</h3>
+                <h3 class="text-center"><i class="fa-solid fa-plug"></i> Energieadvies voor morgen</h3>
                 <ul class="list-group">
                     <li class="list-group-item text-warning">
-                        🥇 <strong>Gouden uur:</strong> <span id="beste_uur_morgen" class="goedkoop"></span>
+                        <i class="fa-solid fa-medal"></i> <strong>Gouden uur:</strong> <span id="beste_uur_morgen" class="goedkoop"></span>
                     </li>
                     <li class="list-group-item">
-                        2️⃣ <strong>Beste 2 uur blok:</strong> <span id="beste_twee_uur_morgen" class="goedkoop"></span>
+                         <strong>Beste <i class="fa-solid fa-2"></i> uur blok:</strong> <span id="beste_twee_uur_morgen" class="goedkoop"></span>
                     </li>
                     <li class="list-group-item">
-                        3️⃣ <strong>Beste 3 uur blok:</strong> <span id="beste_drie_uur_morgen" class="goedkoop"></span>
+                         <strong>Beste <i class="fa-solid fa-3"></i> uur blok:</strong> <span id="beste_drie_uur_morgen" class="goedkoop"></span>
                     </li>
                 </ul>
             </div>
