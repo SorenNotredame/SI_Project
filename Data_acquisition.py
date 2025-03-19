@@ -1,41 +1,38 @@
-#!/usr/bin/python3
-
-# This script will read data from serial connected to the digital meter P1 port
-
-# credits sample code
-    # Jens Depuydt
-    # https://www.jensd.be
-    # https://github.com/jensdepuydt
+import requests
+import random
+import time
 
 import serial
 import sys
 import crcmod.predefined
 import re
 from tabulate import tabulate
+from zigbee2mqtt_class import ZigbeeController
 import os
+
+# Create the list of Zigbee Devices and subscribe to their power consumption
+mqtt_broker_address = "localhost"
+device_list= ["Freezer", "Dryer", "Light"]
+zigbee_controller = ZigbeeController(mqtt_broker_address)
+for device in device_list:
+    # Comment the line below to stop turnin on all contacts
+    # zigbee_controller.turn_on_device(device)  
+    zigbee_controller.subscribe_to_power_consumption(device)
+
 
 # Create clear function to clear the terminal
 clear = lambda: os.system('clear')
 
 # Change your serial port here:
-serialport = '/dev/ttyUSB1	'
+serialport = '/dev/ttyUSB0'
 
 # Enable debug if needed:
 debug = False
 
 # Add/update OBIS codes here:
 obiscodes = {
-    "0-0:96.14.0": "Current rate (1=day,2=night)",
-    "1-0:1.8.1": "Rate 1 (day) - total consumption",
-    "1-0:1.8.2": "Rate 2 (night) - total consumption",
-    "1-0:2.8.1": "Rate 1 (day) - total production",
-    "1-0:2.8.2": "Rate 2 (night) - total production",
-    "1-0:21.7.0": "L1 consumption",
-    "1-0:1.7.0": "All phases consumption",
+    "1-0:21.7.0": "Total consumption",
     "1-0:22.7.0": "L1 production",
-    "1-0:2.7.0": "All phases production",
-    "1-0:32.7.0": "L1 voltage",
-    "1-0:31.7.0": "L1 current",
     }
 
 
@@ -76,7 +73,7 @@ def parsetelegramline(p1line):
         value = values[0][1:-1]
         # separate value and unit (format:value*unit)
         lvalue = value.split("*")
-        value = float(lvalue[0])
+        value = int(float(lvalue[0])*1000)
         if len(lvalue) > 1:
             unit = lvalue[1]
         # return result in tuple: description,value,unit,timestamp
@@ -125,9 +122,16 @@ def main():
                             output.append(r)
                             if debug:
                                 print(f"desc:{r[0]}, val:{r[1]}, u:{r[2]}")
-                    print(tabulate(output,
-                                   headers=['Description', 'Value', 'Unit'],
-                                   tablefmt='github'))
+                    #print(tabulate(output,
+                    #              headers=['Description', 'Value', 'Unit'],
+                    #             tablefmt='github'))
+                    for device in device_list:
+                        power = zigbee_controller.power_consumption.get(device)
+                        if power is None:
+                            power = 0
+                        d = (str(device),power,"W")
+                        output.append(d)
+                    prepare_data(output)
         except KeyboardInterrupt:
             print("Stopping...")
             ser.close()
@@ -141,5 +145,26 @@ def main():
         # flush the buffer
         ser.flush()
 
-if __name__ == '__main__':
+# Configuration settings
+influxdb_url = "http://localhost:8086/api/v2/write?org=docs&bucket=home"
+api_token = "opbXBXfTUfD8POAT3WYYGtlC2PTbkwx4QwbzIH4tREDTSw1TttqNKTfExafd0opk1Eixx_pK6eD285kjuGSwDw=="
+
+def prepare_data(values):
+    for line in values:
+        data = f"Meter {line[0].replace(' ', '_')}={line[1]}"
+        print(data)
+        send_to_influxdb(data)
+
+def send_to_influxdb(values):
+    headers = {
+        "Authorization": f"Token {api_token}",
+        "Content-Type": "text/plain"
+    }
+    response = requests.post(influxdb_url, data=values, headers=headers)
+    if response.status_code == 204:
+        print(f"Successfully written to InfluxDB.")
+    else:
+        print(f"Failed to write to InfluxDB. Status code: {response.status_code}")
+
+if __name__ == "__main__":
     main()

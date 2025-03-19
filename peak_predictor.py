@@ -1,7 +1,7 @@
 import sys
 import time
 from datetime import datetime, timedelta
-from read_p1 import read_p1_value
+from Test_archive.read_p1 import read_p1_value
 
 MAX_PEAK = 3500  # Max piekwaarde in Watt
 SAMPLES_PER_MINUTE = 60  # Aantal samples per minuut
