@@ -39,7 +39,7 @@ function updateEnergieprijzen(data) {
         document.querySelector("#beste_twee_uur_morgen").textContent = "Gegevens nog niet beschikbaar";
         document.querySelector("#beste_drie_uur_morgen").textContent = "Gegevens nog niet beschikbaar";
     }
-
+}
 
 function formatBlok(blok) {
     const uren = Object.keys(blok);
