@@ -85,7 +85,7 @@ def main():
             # Lees en verwerk de vermogenswaarde
             value = get_latest_consumption_poll()
             if value is not None:
-                value_in_watts = value * 1000  # Converteer van kW naar W
+                value_in_watts = value
                 samples.append(value_in_watts)  # Voeg de waarde in Watt toe aan de lijst
                 average_power = calculate_average_power()  # Bereken het gemiddelde vermogen
                 if average_power > max_average_power:
