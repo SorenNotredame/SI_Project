@@ -116,7 +116,7 @@ def read_p1_value():
                     # parse telegram contents, line by line
                     for line in p1telegram.split(b'\r\n'):
                         r = parsetelegramline(line.decode('ascii'))
-                        if r and r[0] == "L1 consumption":
+                        if r and r[0] == "Total consumption":
                             return r[1]
         except KeyboardInterrupt:
             print("Stopping...")
@@ -209,5 +209,6 @@ def send_to_influxdb(values):
     else:
         print(f"Failed to write to InfluxDB. Status code: {response.status_code}")
 
-if __name__ == "__main__":
+""" if __name__ == "__main__":
     main()
+ """

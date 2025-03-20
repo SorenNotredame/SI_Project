@@ -34,7 +34,10 @@ function updateKwartiervermogen(value) {
                 document.getElementById("kwartiervermogen-slider").value = data["kwartiervermorgen_gewenst"]
                 console.log(deviceStatuses)
                 updateKwartiervermogen(data["kwartiervermorgen_gewenst"])
-            })
+           
+                document.getElementById("hoogste-kwartiervermogen").value = data["hoogste_kwartiervermogen"]
+                        console.log(deviceStatuses)
+		 })
             .catch(error => console.error('Error:', error));
     }
 

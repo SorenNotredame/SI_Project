@@ -1,10 +1,25 @@
 import Data_acquisition
+import flask_api
 from zigbee2mqtt_class import ZigbeeController
 import time as t
+import threading
 
-Data_acquisition.main()
+def flask_thread():
+    flask_api.app.run(host="0.0.0.0", debug=True)
+    t.sleep(10)
+
+def data_acq_thread():
+    Data_acquisition.main()
+
+
+flask_th = threading.Thread(target=flask_thread)
+data_acq_th = threading.Thread(target=data_acq_thread)
+
+flask_th.start()
+""" data_acq_th.start()
 
 mqtt_broker_address = "localhost"
+device_id = "Type-C"
 
 
 zigbee_controller = ZigbeeController(mqtt_broker_address)
@@ -20,3 +35,4 @@ while x < 5:
     print(f"Power consumption for {device_id}: {zigbee_controller.power_consumption.get(device_id)}W")
     print(x)
 zigbee_controller.turn_off_device(device_id)
+ """

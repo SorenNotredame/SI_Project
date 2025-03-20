@@ -1,10 +1,21 @@
 from flask import Flask, request, jsonify
 from flask_cors import *
+import Data_acquisition
+from threading import Thread
 
 app = Flask(__name__)
 CORS(app)
 
-values = {'kwartiervermorgen_gewenst': '3500', 'a': False, 'b': True, 'c': True}
+values = {'kwartiervermorgen_gewenst': '3500', 'a': False, 'b': True, 'c': True, 'hoogste_kwartiervermogen': '3500'}    
+
+def flask_thread():
+    app.run(host="0.0.0.0")
+
+def data_thread():
+    Data_acquisition.main()
+
+flask_th  = Thread(target=flask_thread)
+data_th = Thread(target=data_thread)
 
 @app.route('/get_values', methods=['GET'])
 def get_values():
@@ -23,4 +34,5 @@ def get_data():
     return "done"
     
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", debug=True)
+    flask_th.start()
+    data_th.start()
