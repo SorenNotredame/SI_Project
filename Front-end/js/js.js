@@ -62,7 +62,6 @@ function updateKwartiervermogen(value) {
                 "c": document.getElementById("switch-c").checked}
 
         console.log(data)
-<<<<<<< HEAD
         fetch('http://94.110.252.19:5000/data', {
             method: "POST",
             mode: "cors",
@@ -72,18 +71,6 @@ function updateKwartiervermogen(value) {
             "content-type": "application/json"
             })
         })
-=======
-        fetch(`http://127.0.0.1:5000/data`, {
-            method: "POST",
-            mode: "cors",
-            credentials: "include",
-            body: JSON.stringify(data),
-            cache: "no-cache",
-            headers: new Headers({
-              "content-type": "application/json"
-            })
-          })
->>>>>>> f398b6fcaea77d779a608de5937bbca7a9fff7e8
     }
 
     // Functie om de schakelaar en lampje te updaten
@@ -98,12 +85,9 @@ function updateKwartiervermogen(value) {
         } else {
             
             statusText.innerText = "Manuele mode OFF ";
-<<<<<<< HEAD
         }
         if (send) {
             send_info()
-=======
->>>>>>> f398b6fcaea77d779a608de5937bbca7a9fff7e8
         }
     }
 

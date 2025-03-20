@@ -2,7 +2,6 @@ import json
 import paho.mqtt.client as mqtt
 import time as t
 
-
 class ZigbeeController:
     def __init__(self, mqtt_broker, mqtt_port=1883):
         self.mqtt_broker = mqtt_broker
@@ -12,15 +11,20 @@ class ZigbeeController:
         self.client.connect(self.mqtt_broker, self.mqtt_port, 60)
         self.client.loop_start()
         self.power_consumption = {}
+        self.device_states = {}
 
     def on_message(self, client, userdata, msg):
         try:
             payload = json.loads(msg.payload)
             device_id = msg.topic.split('/')[-1]
             power = payload.get('power')
+            state = payload.get('state')
             if power is not None:
                 self.power_consumption[device_id] = power
                 print(f"Power consumption for {device_id}: {power}W")
+            if state is not None:
+                self.device_states[device_id] = state
+                print(f"State for {device_id}: {state}")
         except json.JSONDecodeError:
             print("Failed to decode JSON payload")
 
@@ -32,9 +36,57 @@ class ZigbeeController:
         self.client.publish(f"zigbee2mqtt/{device_id}/set", json.dumps({"state": "OFF"}))
         print(f"Device {device_id} turned off")
 
-    def subscribe_to_power_consumption(self, device_id):
+    def subscribe_to_device(self, device_id):
         self.client.subscribe(f"zigbee2mqtt/{device_id}")
         print(f"Subscribed to power consumption messages for {device_id}")
+
+    def get_device_state(self, device_id):
+        return self.device_states.get(device_id, "Unknown")
+    
+    def get_device_power(self, device_id):
+        return self.power_consumption.get(device_id, "Unknown")
+    
+# Example usage:
+mqtt_broker_address = "localhost"
+device_id = "Type-C"
+
+zigbee_controller = ZigbeeController(mqtt_broker_address)
+zigbee_controller.subscribe_to_device(device_id)
+print(f"Current power for {device_id}: {zigbee_controller.get_device_power(device_id)}")
+print(f"Current state for {device_id}: {zigbee_controller.get_device_state(device_id)}")
+t.sleep(1)
+zigbee_controller.turn_on_device(device_id)
+t.sleep(30)
+print(f"Current power for {device_id}: {zigbee_controller.get_device_power(device_id)}")
+print(f"Current state for {device_id}: {zigbee_controller.get_device_state(device_id)}")
+t.sleep(1)
+t.sleep(5)
+print(f"Current power for {device_id}: {zigbee_controller.get_device_power(device_id)}")
+print(f"Current state for {device_id}: {zigbee_controller.get_device_state(device_id)}")
+t.sleep(1)
+print(f"Current power for {device_id}: {zigbee_controller.get_device_power(device_id)}")
+print(f"Current state for {device_id}: {zigbee_controller.get_device_state(device_id)}")
+t.sleep(1)
+print(f"Current power for {device_id}: {zigbee_controller.get_device_power(device_id)}")
+print(f"Current state for {device_id}: {zigbee_controller.get_device_state(device_id)}")
+t.sleep(1)
+print(f"Current power for {device_id}: {zigbee_controller.get_device_power(device_id)}")
+print(f"Current state for {device_id}: {zigbee_controller.get_device_state(device_id)}")
+t.sleep(1)
+zigbee_controller.turn_off_device(device_id)
+
+"""
+# Turn on the device and get its state
+zigbee_controller.turn_on_device(device_id)
+t.sleep(2)  # Wait for the message to be received
+
+print(f"Current state for {device_id}: {zigbee_controller.get_device_state(device_id)}")
+
+# Turn off the device and get its state
+zigbee_controller.turn_off_device(device_id)
+t.sleep(2)  # Wait for the message to be received
+print(f"Current state for {device_id}: {zigbee_controller.get_device_state(device_id)}")
+        
 
 # Example usage:
 mqtt_broker_address = "localhost"
@@ -53,4 +105,4 @@ while x < 5:
     print(f"Power consumption for {device_id}: {zigbee_controller.power_consumption.get(device_id)}W")
     print(x)
 zigbee_controller.turn_off_device(device_id)
-
+ """

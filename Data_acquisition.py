@@ -13,12 +13,11 @@ import traceback # Added by Frank
 
 # Create the list of Zigbee Devices and subscribe to their power consumption
 mqtt_broker_address = "localhost"
-device_list= ["Freezer", "Dryer", "Light"]
+device_list= ["Type-A", "Type-B", "Type-C"]
 zigbee_controller = ZigbeeController(mqtt_broker_address)
+# Here we will subscribe to ALL devices to be able to receive their current power and state
 for device in device_list:
-    # Comment the line below to stop turnin on all contacts
-    # zigbee_controller.turn_on_device(device)  
-    zigbee_controller.subscribe_to_power_consumption(device)
+    zigbee_controller.subscribe_to_device(device)
 
 
 # Create clear function to clear the terminal

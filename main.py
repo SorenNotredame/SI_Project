@@ -5,7 +5,7 @@ import time as t
 Data_acquisition.main()
 
 mqtt_broker_address = "localhost"
-device_id = "Freezer"
+
 
 zigbee_controller = ZigbeeController(mqtt_broker_address)
 zigbee_controller.turn_on_device(device_id)
