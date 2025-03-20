@@ -91,8 +91,13 @@ def main():
                 if average_power > max_average_power:
                     max_average_power = average_power
                 update_device_status_with_prediction(average_power)  # Werk de status van de apparaten bij
+                # Print het gemiddelde vermogen
                 print(f"Current Average Power: {average_power:.2f} W")
                 print(f"CTurnOff: {CTurnOff}, ATurnOff: {ATurnOff}, BTurnOff: {BTurnOff}")
+
+                # Bereken en print de geschatte kwartierpiek
+                predicted_peak = predict_quarter_peak()
+                print(f"Predicted Quarter Peak: {predicted_peak:.2f} W")
 
             # Sleep for 1 second to simulate sampling every second
             time.sleep(1)
