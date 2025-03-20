@@ -18,11 +18,44 @@ now = datetime.now()
 next_cycle = (now + timedelta(minutes=15 - now.minute % 15)).replace(second=0, microsecond=0)
 
 def get_max_average_power():
+    """Return the maximum average power recorded."""
     global max_average_power
     return max_average_power
 
-def update_device_status(average_power):
+def predict_quarter_peak():
+    """Voorspel de piekwaarde voor het kwartier."""
+    if not samples:
+        return 0 
+
+    elapsed_time = len(samples)  # Aantal verstreken seconden
+    remaining_time = 15 * 60 - elapsed_time  # Resterende tijd in seconden
+
+    # Gemiddeld verbruik van de verstreken tijd
+    average_elapsed = sum(samples) / len(samples)
+
+    # Actueel verbruik (laatste sample)
+    current_consumption = samples[-1]
+
+    # Voorspelling voor het resterende deel van het kwartier
+    predicted_remaining = current_consumption * remaining_time
+
+    # Totale voorspelling voor het kwartier
+    total_prediction = (average_elapsed * elapsed_time + predicted_remaining) / (15 * 60)
+    return total_prediction
+
+def update_device_status_with_prediction(average_power):
+    """Update de status van apparaten met de voorspelling."""
     global CTurnOff, ATurnOff, BTurnOff
+
+    # Voorspel de piekwaarde voor het kwartier
+    predicted_peak = predict_quarter_peak()
+
+    # Als de voorspelling de piekwaarde niet overschrijdt, mag niets uitvallen
+    if predicted_peak < MAX_PEAK:
+        CTurnOff = ATurnOff = BTurnOff = False
+        return
+
+    # Anders, gebruik de bestaande logica
     if average_power >= 0.8 * MAX_PEAK:
         BTurnOff = True
     elif average_power >= 0.7 * MAX_PEAK:
@@ -33,6 +66,7 @@ def update_device_status(average_power):
         CTurnOff = ATurnOff = BTurnOff = False
 
 def calculate_average_power():
+    """Bereken het gemiddelde vermogen van de verzamelde samples."""
     if samples:
         return sum(samples) / len(samples)
     return 0
@@ -40,33 +74,34 @@ def calculate_average_power():
 def main():
     global samples, max_average_power, next_cycle
 
-    try:
-        # Check if it's time to start a new cycle
-        if datetime.now() >= next_cycle:
-            print(f"Starting new cycle at {next_cycle.strftime('%H:%M:%S')}")
-            samples = []  # Reset samples for the new cycle
-            next_cycle = (next_cycle + timedelta(minutes=15)).replace(second=0, microsecond=0)
+    while True:
+        try:
+            # Check if it's time to start a new cycle
+            if datetime.now() >= next_cycle:
+                print(f"Starting new cycle at {next_cycle.strftime('%H:%M:%S')}")
+                samples = []  # Reset samples for the new cycle
+                next_cycle = (next_cycle + timedelta(minutes=15)).replace(second=0, microsecond=0)
 
-        # Lees en verwerk de vermogenswaarde
-        value = get_latest_consumption_poll()
-        if value is not None:
-            value_in_watts = value  # Converteer van kW naar W
-            samples.append(value_in_watts)  # Voeg de waarde in Watt toe aan de lijst
-            average_power = calculate_average_power()  # Bereken het gemiddelde vermogen
-            if average_power > max_average_power:
-                max_average_power = average_power
-            update_device_status(average_power)  # Werk de status van de apparaten bij
-            print(f"Current Average Power: {average_power:.2f} W")
-            print(f"CTurnOff: {CTurnOff}, ATurnOff: {ATurnOff}, BTurnOff: {BTurnOff}")
+            # Lees en verwerk de vermogenswaarde
+            value = get_latest_consumption_poll()
+            if value is not None:
+                value_in_watts = value * 1000  # Converteer van kW naar W
+                samples.append(value_in_watts)  # Voeg de waarde in Watt toe aan de lijst
+                average_power = calculate_average_power()  # Bereken het gemiddelde vermogen
+                if average_power > max_average_power:
+                    max_average_power = average_power
+                update_device_status_with_prediction(average_power)  # Werk de status van de apparaten bij
+                print(f"Current Average Power: {average_power:.2f} W")
+                print(f"CTurnOff: {CTurnOff}, ATurnOff: {ATurnOff}, BTurnOff: {BTurnOff}")
 
-        # Sleep for 1 second to simulate sampling every second
-        time.sleep(1)
+            # Sleep for 1 second to simulate sampling every second
+            time.sleep(1)
 
-    except KeyboardInterrupt:
-        print("Stopping...")
-        sys.exit()  # Forcefully exit the script
-    except Exception as e:
-        print(f"Something went wrong: {e}")
+        except KeyboardInterrupt:
+            print("Stopping...")
+            sys.exit()  # Forcefully exit the script
+        except Exception as e:
+            print(f"Something went wrong: {e}")
 
-""" if __name__ == '__main__':
-    main() """
+if __name__ == '__main__':
+    main()
