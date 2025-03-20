@@ -19,16 +19,16 @@ function updateKwartiervermogen(value) {
         fetch('http://94.110.252.19:5000/get_values', {method: 'GET'})
             .then(response => response.json())
             .then(data => {                
-                if (data["a"] != document.getElementById("switch-a").checked) {
-                    document.getElementById("switch-a").checked = data["a"]
+                if (data["a_manueel"] != document.getElementById("switch-a").checked) {
+                    document.getElementById("switch-a").checked = data["a_manueel"]
                     toggleDevice("a", false)
                 }
-                if (data["b"] != document.getElementById("switch-b").checked) {
-                    document.getElementById("switch-b").checked = data["b"]
+                if (data["b_manueel"] != document.getElementById("switch-b").checked) {
+                    document.getElementById("switch-b").checked = data["b_manueel"]
                     toggleDevice("b", false)
                 }
-                if (data["c"] != document.getElementById("switch-c").checked) {
-                    document.getElementById("switch-c").checked = data["c"]
+                if (data["c_manueel"] != document.getElementById("switch-c").checked) {
+                    document.getElementById("switch-c").checked = data["c_manueel"]
                     toggleDevice("c", false)
                 }
                 document.getElementById("kwartiervermogen-slider").value = data["kwartiervermorgen_gewenst"]
@@ -37,6 +37,20 @@ function updateKwartiervermogen(value) {
            
                 document.getElementById("hoogste-kwartiervermogen").value = data["hoogste_kwartiervermogen"]
                         console.log(deviceStatuses)
+                
+                if (data["a_actief"] != document.getElementById("switch-a").checked) {
+                    document.getElementById("switch-a").checked = data["a_manueel"]
+                    toggleDevice("a", false)
+                }
+                if (data["b_actief"] != document.getElementById("switch-b").checked) {
+                    document.getElementById("switch-b").checked = data["b_manueel"]
+                    toggleDevice("b", false)
+                }
+                if (data["c_actief"] != document.getElementById("switch-c").checked) {
+                    document.getElementById("switch-c").checked = data["c_manueel"]
+                    toggleDevice("c", false)
+                }
+                
 		 })
             .catch(error => console.error('Error:', error));
     }

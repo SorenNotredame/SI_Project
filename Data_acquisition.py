@@ -21,7 +21,7 @@ for device in device_list:
 
 
 # Create clear function to clear the terminal
-clear = lambda: os.system('clear')
+# clear = lambda: os.system('clear')
 
 # Change your serial port here:
 serialport = '/dev/ttyUSB0'
@@ -34,6 +34,9 @@ obiscodes = {
     "1-0:21.7.0": "Total consumption",
     "1-0:22.7.0": "L1 production",
     }
+
+# Latest consumption poll
+latest_consumption = 0
 
 
 def checkcrc(p1telegram):
@@ -86,7 +89,7 @@ def parsetelegramline(p1line):
         return ()
 
 ### Code Frank voor peak_predictor.py
-def read_p1_value():
+""" def read_p1_value():
     ser = serial.Serial(serialport, 115200, xonxoff=1)
     p1telegram = bytearray()
     while True:
@@ -127,9 +130,10 @@ def read_p1_value():
                 print(traceback.format_exc())
             print ("Something went wrong...")
             ser.close()
-        ser.flush()
+        ser.flush() """
 
 def main():
+    global latest_consumption
     ser = serial.Serial(serialport, 115200, xonxoff=1)
     p1telegram = bytearray()
     while True:
@@ -145,7 +149,7 @@ def main():
                     print ("Found beginning of P1 telegram")
                 p1telegram = bytearray()
                 #print('*' * 60 + "\n")
-                clear()
+                # clear()
                 
             # add line to complete telegram
             p1telegram.extend(p1line)
@@ -165,9 +169,8 @@ def main():
                             output.append(r)
                             if debug:
                                 print(f"desc:{r[0]}, val:{r[1]}, u:{r[2]}")
-                    #print(tabulate(output,
-                    #              headers=['Description', 'Value', 'Unit'],
-                    #             tablefmt='github'))
+                        if r and r[0] == "Total consumption":
+                            latest_consumption = r[1]
                     for device in device_list:
                         power = zigbee_controller.power_consumption.get(device)
                         if power is None:
@@ -191,6 +194,10 @@ def main():
 # Configuration settings
 influxdb_url = "http://localhost:8086/api/v2/write?org=docs&bucket=home"
 api_token = "opbXBXfTUfD8POAT3WYYGtlC2PTbkwx4QwbzIH4tREDTSw1TttqNKTfExafd0opk1Eixx_pK6eD285kjuGSwDw=="
+
+def get_latest_consumption_poll():
+    global latest_consumption
+    return latest_consumption
 
 def prepare_data(values):
     for line in values:
