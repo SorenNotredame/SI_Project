@@ -1,47 +1,34 @@
 import sys
 import time
 from datetime import datetime, timedelta
-from Test_archive.read_p1 import read_p1_value
+from Data_acquisition import read_p1_value
 
 MAX_PEAK = 3500  # Max piekwaarde in Watt
-SAMPLES_PER_MINUTE = 60  # Aantal samples per minuut
-MINUTES = 15  # Aantal minuten voor gemiddelde berekening
 
 # Variables to track the state
 samples = []
-minute_averages = []
-current_cycle_power = 0
 CTurnOff = False
 ATurnOff = False
 BTurnOff = False
 
-def update_device_status():
-    global CTurnOff, ATurnOff, BTurnOff, current_cycle_power
-    if current_cycle_power >= 0.8 * MAX_PEAK:
+def update_device_status(average_power):
+    global CTurnOff, ATurnOff, BTurnOff
+    if average_power >= 0.8 * MAX_PEAK:
         BTurnOff = True
-    elif current_cycle_power >= 0.7 * MAX_PEAK:
+    elif average_power >= 0.7 * MAX_PEAK:
         ATurnOff = True
-    elif current_cycle_power >= 0.6 * MAX_PEAK:
+    elif average_power >= 0.6 * MAX_PEAK:
         CTurnOff = True
     else:
         CTurnOff = ATurnOff = BTurnOff = False
 
-def add_sample(value):
-    global samples, current_cycle_power
-    samples.append(value)
-    if len(samples) == SAMPLES_PER_MINUTE:
-        minute_average = sum(samples) / len(samples)
-        minute_averages.append(minute_average)
-        samples.clear()
-    if minute_averages:
-        current_cycle_power = sum(minute_averages) / len(minute_averages)
-    update_device_status()
-
-def get_status():
-    return current_cycle_power, CTurnOff, ATurnOff, BTurnOff
+def calculate_average_power():
+    if samples:
+        return sum(samples) / len(samples)
+    return 0
 
 def main():
-    global samples, minute_averages
+    global samples
     # Calculate the next 15-minute interval
     now = datetime.now()
     next_cycle = (now + timedelta(minutes=15 - now.minute % 15)).replace(second=0, microsecond=0)
@@ -52,15 +39,16 @@ def main():
             if datetime.now() >= next_cycle:
                 print(f"Starting new cycle at {next_cycle.strftime('%H:%M:%S')}")
                 samples = []  # Reset samples for the new cycle
-                minute_averages = []  # Reset minute averages for the new cycle
-                next_cycle += timedelta(minutes=15)  # Schedule the next cycle
+                next_cycle = (next_cycle + timedelta(minutes=15)).replace(second=0, microsecond=0)
 
-            # Read and process the power value
+            # Lees en verwerk de vermogenswaarde
             value = read_p1_value()
             if value:
-                add_sample(value)
-                current_cycle_power, CTurnOff, ATurnOff, BTurnOff = get_status()
-                print(f"Current Cycle Power: {current_cycle_power} W")
+                value_in_watts = value * 1000  # Converteer van kW naar W
+                samples.append(value_in_watts)  # Voeg de waarde in Watt toe aan de lijst
+                average_power = calculate_average_power()  # Bereken het gemiddelde vermogen
+                update_device_status(average_power)  # Werk de status van de apparaten bij
+                print(f"Current Average Power: {average_power:.2f} W")
                 print(f"CTurnOff: {CTurnOff}, ATurnOff: {ATurnOff}, BTurnOff: {BTurnOff}")
 
             # Sleep for 1 second to simulate sampling every second

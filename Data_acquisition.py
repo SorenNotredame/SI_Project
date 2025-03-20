@@ -9,6 +9,7 @@ import re
 from tabulate import tabulate
 from zigbee2mqtt_class import ZigbeeController
 import os
+import traceback # Added by Frank
 
 # Create the list of Zigbee Devices and subscribe to their power consumption
 mqtt_broker_address = "localhost"
@@ -85,6 +86,49 @@ def parsetelegramline(p1line):
     else:
         return ()
 
+### Code Frank voor peak_predictor.py
+def read_p1_value():
+    ser = serial.Serial(serialport, 115200, xonxoff=1)
+    p1telegram = bytearray()
+    while True:
+        try:
+            # read input from serial port
+            p1line = ser.readline()
+            if debug:
+                print ("Reading: ", p1line.strip())
+            # P1 telegram starts with /
+            # We need to create a new empty telegram
+            if "/" in p1line.decode('ascii'):
+                if debug:
+                    print ("Found beginning of P1 telegram")
+                p1telegram = bytearray()
+                clear()
+                
+            # add line to complete telegram
+            p1telegram.extend(p1line)
+            # P1 telegram ends with ! + CRC16 checksum
+            if "!" in p1line.decode('ascii'):
+                if debug:
+                    print("Found end, printing full telegram")
+                    print('*' * 40)
+                    print(p1telegram.decode('ascii').strip())
+                    print('*' * 40)
+                if checkcrc(p1telegram):
+                    # parse telegram contents, line by line
+                    for line in p1telegram.split(b'\r\n'):
+                        r = parsetelegramline(line.decode('ascii'))
+                        if r and r[0] == "L1 consumption":
+                            return r[1]
+        except KeyboardInterrupt:
+            print("Stopping...")
+            ser.close()
+            break
+        except:
+            if debug:
+                print(traceback.format_exc())
+            print ("Something went wrong...")
+            ser.close()
+        ser.flush()
 
 def main():
     ser = serial.Serial(serialport, 115200, xonxoff=1)

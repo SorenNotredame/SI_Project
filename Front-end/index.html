@@ -74,8 +74,8 @@
 
     <section id="apparaten" class="container mt-5">
         <h2 class="text-dark text-center mb-2"><i class="fa-solid fa-plug"></i> Apparatenbeheer</h2>
-        <p class="text-dark text-center"><i class="fa-solid fa-toggle-on"></i> met de schuifknop kan je bepalen of een apparaat altijd aanstaat</p>
-        <p class="text-dark text-center mb-4">De statusindicator in de bovenhoek geeft aan of het apparaat is in- of uitgeschakeld voor optimaal verbruik. Wanneer de schuifknop is geactiveerd, wordt de beslissing van het slimme systeem genegeerd.</p>
+        <p class="text-dark text-center mb-2">De statusindicator in de bovenhoek geeft aan of het apparaat is in- of uitgeschakeld voor optimaal verbruik.</p>
+        <p class="text-dark text-center mb-4"> Wanneer de schuifknop is geactiveerd, wordt de beslissing van het slimme systeem genegeerd en is het apparaat ingeschakeld.</p>
         <div class="row justify-content-center">
 
             <!-- Type A -->
@@ -84,8 +84,7 @@
                     <span class="device-status" id="status-label-a">Niet Actief</span>
                     <h3 class="text-white">Type A</h3>
                     <div class="status">
-                        <span class="status-light" id="status-a"></span>
-                        <p class="status-text text-white" id="text-a">Uit</p>
+                        <p class="status-text text-white" id="text-a">manuele mode OFF</p>
                     </div>
                     <input type="checkbox" class="switch" id="switch-a" onclick="toggleDevice('a')">
                 </div>
@@ -97,8 +96,7 @@
                     <span class="device-status" id="status-label-b">Niet Actief</span>
                     <h3 class="text-white">Type B</h3>
                     <div class="status">
-                        <span class="status-light" id="status-b"></span>
-                        <p class="status-text text-white" id="text-b">Uit</p>
+                        <p class="status-text text-white" id="text-b">manuele mode OFF</p>
                     </div>
                     <input type="checkbox" class="switch" id="switch-b" onclick="toggleDevice('b')">
                 </div>
@@ -110,8 +108,7 @@
                     <span class="device-status" id="status-label-c">Niet Actief</span>
                     <h3 class="text-white">Type C</h3>
                     <div class="status">
-                        <span class="status-light" id="status-c"></span>
-                        <p class="status-text text-white" id="text-c">Uit</p>
+                        <p class="status-text text-white" id="text-c">manuele mode OFF</p>
                     </div>
                     <input type="checkbox" class="switch" id="switch-c" onclick="toggleDevice('c')">
                 </div>
@@ -121,42 +118,108 @@
     </section>
 
 
-    <section id="energieprijzen" class="row justify-content-center mt-5">
+    <section id="energieprijzen" class="row justify-content-center mt-3">
         <!-- Energieadvies Vandaag -->
-        <div class="col-md-6">
+        <div class="col-md-6 mt-3">
             <div class="bg-card">
                 <h3 class="text-center"><i class="fa-solid fa-plug"></i> Energieadvies voor vandaag</h3>
-                <ul class="list-group">
-                    <li class="list-group-item text-warning">
-                        <i class="fa-solid fa-medal"></i> <strong>Gouden uur:</strong> <span id="beste_uur_vandaag" class="goedkoop"></span>
-                    </li>
-                    <li class="list-group-item">
-                         <strong>Beste <i class="fa-solid fa-2"></i> uur blok:</strong> <span id="beste_twee_uur_vandaag" class="goedkoop"></span>
-                    </li>
-                    <li class="list-group-item">
-                         <strong>Beste <i class="fa-solid fa-3"></i> uur blok:</strong> <span id="beste_drie_uur_vandaag" class="goedkoop"></span>
-                    </li>
-                </ul>
+            
+                <div class="accordion" id="energieAccordion">
+                    <!-- Gouden uur -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                                🔆 Gouden uur
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#energieAccordion">
+                            <div class="accordion-body">
+                                <strong><span id="beste_uur_vandaag" class="goedkoop"></span></strong>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <!-- Beste 2-uur blok -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                                ⏳ Beste 2-uur blok
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#energieAccordion">
+                            <div class="accordion-body">
+                                <strong><span id="beste_twee_uur_vandaag" class="goedkoop"></span></strong>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <!-- Beste 3-uur blok -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                                ⏳ Beste 3-uur blok
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#energieAccordion">
+                            <div class="accordion-body">
+                                <strong><span id="beste_drie_uur_vandaag" class="goedkoop"></span></strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <img src="assets/energieprijzen_vandaag.png" class="img-fluid mt-3 rounded shadow"
                  alt="Energieprijzen vandaag">
         </div>
 
         <!-- Energieadvies Morgen -->
-        <div class="col-md-6">
+        <div class="col-md-6 mt-3">
             <div class="bg-card">
                 <h3 class="text-center"><i class="fa-solid fa-plug"></i> Energieadvies voor morgen</h3>
-                <ul class="list-group">
-                    <li class="list-group-item text-warning">
-                        <i class="fa-solid fa-medal"></i> <strong>Gouden uur:</strong> <span id="beste_uur_morgen" class="goedkoop"></span>
-                    </li>
-                    <li class="list-group-item">
-                         <strong>Beste <i class="fa-solid fa-2"></i> uur blok:</strong> <span id="beste_twee_uur_morgen" class="goedkoop"></span>
-                    </li>
-                    <li class="list-group-item">
-                         <strong>Beste <i class="fa-solid fa-3"></i> uur blok:</strong> <span id="beste_drie_uur_morgen" class="goedkoop"></span>
-                    </li>
-                </ul>
+            
+                <div class="accordion" id="energieAccordionMorgen">
+                    <!-- Gouden uur -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOneMorgen">
+                                🔆 Gouden uur
+                            </button>
+                        </h2>
+                        <div id="collapseOneMorgen" class="accordion-collapse collapse" data-bs-parent="#energieAccordionMorgen">
+                            <div class="accordion-body">
+                                <strong><span id="beste_uur_morgen" class="goedkoop"></span></strong>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <!-- Beste 2-uur blok -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwoMorgen">
+                                ⏳ Beste 2-uur blok
+                            </button>
+                        </h2>
+                        <div id="collapseTwoMorgen" class="accordion-collapse collapse" data-bs-parent="#energieAccordionMorgen">
+                            <div class="accordion-body">
+                                <strong><span id="beste_twee_uur_morgen" class="goedkoop"></span></strong>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <!-- Beste 3-uur blok -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThreeMorgen">
+                                ⏳ Beste 3-uur blok
+                            </button>
+                        </h2>
+                        <div id="collapseThreeMorgen" class="accordion-collapse collapse" data-bs-parent="#energieAccordionMorgen">
+                            <div class="accordion-body">
+                                <strong><span id="beste_drie_uur_morgen" class="goedkoop"></span></strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <img src="assets/energieprijzen_morgen.png" class="img-fluid mt-3 rounded shadow"
                  alt="Energieprijzen morgen">
@@ -184,6 +247,21 @@
     </div>
 </footer>
 <script>
+    
+    document.addEventListener("DOMContentLoaded", function () {
+    let imgMorgen = document.querySelector('img[alt="Energieprijzen morgen"]');
+    if (imgMorgen) {
+        imgMorgen.onerror = function () {
+            console.warn("Originele afbeelding niet gevonden. Fallback wordt geladen.");
+            this.onerror = null; // Voorkom een oneindige lus als de fallback-afbeelding ook niet bestaat
+            this.src = "assets/morgennietbeschikbaar.png";
+        };
+
+        // Forceer de browser om opnieuw te controleren of het bestand bestaat
+        imgMorgen.src = imgMorgen.src; 
+    }
+});
+
     function logout() {
         localStorage.removeItem("loggedIn"); // Verwijder login status
         window.location.href = "login.html"; // Redirect naar login
