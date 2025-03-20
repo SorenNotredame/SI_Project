@@ -21,8 +21,8 @@ function updateEnergieprijzen(data) {
     const gemiddeldePrijs3Uur = berekenGemiddeldePrijs(Object.keys(data.vandaag.goedkoopste_3u_blok), data.vandaag.prijzen);
     document.querySelector("#beste_drie_uur_vandaag").textContent = `${goedkoopste3UurVandaag} (Gemiddeld: €${gemiddeldePrijs3Uur.toFixed(2)})`;
 
-    // Morgen
-    if (data.morgen) {
+// Controleer of er gegevens zijn voor morgen
+    if (data.morgen && Object.keys(data.morgen.prijzen).length > 0) {
         const goedkoopsteUurMorgen = formatBlok(data.morgen.goedkoopste_uur);
         const prijsMorgen = Object.values(data.morgen.goedkoopste_uur)[0];
         document.querySelector("#beste_uur_morgen").textContent = `${goedkoopsteUurMorgen} (€${prijsMorgen.toFixed(2)})`;
@@ -39,7 +39,7 @@ function updateEnergieprijzen(data) {
         document.querySelector("#beste_twee_uur_morgen").textContent = "Gegevens nog niet beschikbaar";
         document.querySelector("#beste_drie_uur_morgen").textContent = "Gegevens nog niet beschikbaar";
     }
-}
+
 
 function formatBlok(blok) {
     const uren = Object.keys(blok);
