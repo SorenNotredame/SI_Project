@@ -32,25 +32,40 @@ function updateKwartiervermogen(value) {
                     toggleDevice("c", false)
                 }
                 document.getElementById("kwartiervermogen-slider").value = data["kwartiervermorgen_gewenst"]
-                console.log(deviceStatuses)
+                console.log("kwartiervermogen_gewenst", data["kwartiervermogen_gewenst"])
                 updateKwartiervermogen(data["kwartiervermorgen_gewenst"])
            
-                document.getElementById("hoogste-kwartiervermogen").value = data["hoogste_kwartiervermogen"]
-                        console.log(deviceStatuses)
+                document.getElementById("hoogste-kwartiervermogen").textContent = data["hoogste_kwartiervermogen"]
                 
-                if (data["a_actief"] != document.getElementById("switch-a").checked) {
-                    document.getElementById("switch-a").checked = data["a_manueel"]
-                    toggleDevice("a", false)
-                }
-                if (data["b_actief"] != document.getElementById("switch-b").checked) {
-                    document.getElementById("switch-b").checked = data["b_manueel"]
-                    toggleDevice("b", false)
-                }
-                if (data["c_actief"] != document.getElementById("switch-c").checked) {
-                    document.getElementById("switch-c").checked = data["c_manueel"]
-                    toggleDevice("c", false)
-                }
+                console.log("hoogste_kwartiervermogen", data["hoogste_kwartiervermogen"])
                 
+                if (data["a_actief"]) {
+                    document.getElementById("status-label-a").classList.remove("active");
+                    document.getElementById("status-label-a").textContent = "Niet actief";
+                        
+                } else {
+                    document.getElementById("status-label-a").classList.add("active");
+                    document.getElementById("status-label-a").textContent = "Actief";        
+                }
+                console.log("a_actief", data["a_actief"])
+
+                if (data["b_actief"]) {
+                    document.getElementById("status-label-b").classList.remove("active");
+                    document.getElementById("status-label-b").textContent = "Niet actief";
+                } else {
+                    document.getElementById("status-label-b").classList.add("active");
+                    document.getElementById("status-label-b").textContent = "Actief";
+                }
+                console.log("b_actief", data["b_actief"])
+
+                if (data["c_actief"]) {
+                    document.getElementById("status-label-c").classList.remove("active");
+                    document.getElementById("status-label-c").textContent = "Niet actief";
+                } else {
+                    document.getElementById("status-label-c").classList.add("active");
+                    document.getElementById("status-label-c").textContent = "Actief";
+                }
+                console.log("c_actief", data["c_actief"])
 		 })
             .catch(error => console.error('Error:', error));
     }

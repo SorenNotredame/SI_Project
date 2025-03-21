@@ -7,8 +7,9 @@ import peak_predictor
 
 app = Flask(__name__)
 CORS(app)
-
-values = {'kwartiervermorgen_gewenst': '3500', 'a_manueel': False, 'b_manueel': True, 'c_manueel': True, 'hoogste_kwartiervermogen': '3500', 'a_actief': True, "b_actief": True, 'c_actief': True}    
+#_manueel == True is dat deze schakelaar aanstaat
+#_actief == True is dat de schakeling aan staat dus apparaat is niet actief indien True
+values = {'kwartiervermorgen_gewenst': '3500', 'a_manueel': False, 'b_manueel': True, 'c_manueel': True, 'hoogste_kwartiervermogen': '3500', 'a_actief': False, "b_actief": False, 'c_actief': False}    
 
 def flask_thread():
     app.run(host="0.0.0.0")
@@ -21,10 +22,10 @@ def peak_thread():
     while True:
         peak.main()
         values['hoogste_kwartiervermogen'] = f"{peak.max_average_power:.2f}"
+        print(bool(peak.ATurnOff), bool(peak.BTurnOff), bool(peak.CTurnOff), peak.max_average_power)
         values['a_actief'] = peak.ATurnOff
         values['b_actief'] = peak.BTurnOff
         values['c_actief'] = peak.CTurnOff
-
 
 flask_th  = Thread(target=flask_thread); flask_th.start()
 data_th = Thread(target=data_thread); data_th.start()
