@@ -12,6 +12,7 @@ ATurnOff = False
 BTurnOff = False
 average_power = 0
 max_average_power = 0
+counter = 0
 
 # Calculate the next 15-minute interval
 now = datetime.now()
@@ -40,8 +41,11 @@ def predict_quarter_peak():
 
 def update_device_status_with_prediction(average_power):
     """Update de status van apparaten met de voorspelling."""
-    global CTurnOff, ATurnOff, BTurnOff
+    global CTurnOff, ATurnOff, BTurnOff, counter
 
+    if counter > 0:
+        counter -= 1
+        
     # Voorspel de piekwaarde voor het kwartier
     predicted_peak = predict_quarter_peak()
 
@@ -51,13 +55,15 @@ def update_device_status_with_prediction(average_power):
         return
     
     # Anders, gebruik de bestaande logica
-    if average_power >= 0.8 * MAX_PEAK and ATurnOff:
-        BTurnOff = True
-    if average_power >= 0.7 * MAX_PEAK and CTurnOff:
-        ATurnOff = True
-    if average_power >= 0.6 * MAX_PEAK:
-        CTurnOff = True
-
+    if counter == 0:
+        if average_power >= 0.8 * MAX_PEAK and ATurnOff:
+            BTurnOff = True
+        if average_power >= 0.7 * MAX_PEAK and CTurnOff:
+            ATurnOff = True
+            counter = 20
+        if average_power >= 0.6 * MAX_PEAK:
+            CTurnOff = True
+            counter = 20
 
 def calculate_average_power():
     """Bereken het gemiddelde vermogen van de verzamelde samples."""
