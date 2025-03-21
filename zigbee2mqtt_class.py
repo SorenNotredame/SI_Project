@@ -46,12 +46,12 @@ class ZigbeeController:
     def get_device_power(self, device_id):
         return self.power_consumption.get(device_id, "Unknown")   
 # Example usage:
-"""
+
 mqtt_broker_address = "localhost"
 device_id = "Type-C"
 
 zigbee_controller = ZigbeeController(mqtt_broker_address)
-zigbee_controller.subscribe_to_device(device_id)
+#zigbee_controller.subscribe_to_device(device_id)
 print(f"Current power for {device_id}: {zigbee_controller.get_device_power(device_id)}")
 print(f"Current state for {device_id}: {zigbee_controller.get_device_state(device_id)}")
 t.sleep(1)
@@ -86,7 +86,7 @@ zigbee_controller.turn_off_device(device_id)
 t.sleep(2)  # Wait for the message to be received
 print(f"Current state for {device_id}: {zigbee_controller.get_device_state(device_id)}")
         
-
+"""
 # Example usage:
 mqtt_broker_address = "localhost"
 device_id = "Freezer"
@@ -104,4 +104,4 @@ while x < 5:
     print(f"Power consumption for {device_id}: {zigbee_controller.power_consumption.get(device_id)}W")
     print(x)
 zigbee_controller.turn_off_device(device_id)
- """
+"""

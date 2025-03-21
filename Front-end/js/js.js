@@ -18,7 +18,9 @@ function updateKwartiervermogen(value) {
     function get_info() {
         fetch('http://94.110.252.19:5000/get_values', {method: 'GET'})
             .then(response => response.json())
-            .then(data => {                
+            .then(data => {   
+                console.log(data)     
+                //checken manueele override voor elk type        
                 if (data["a_manueel"] != document.getElementById("switch-a").checked) {
                     document.getElementById("switch-a").checked = data["a_manueel"]
                     toggleDevice("a", false)
@@ -27,28 +29,37 @@ function updateKwartiervermogen(value) {
                     document.getElementById("switch-b").checked = data["b_manueel"]
                     toggleDevice("b", false)
                 }
+                
                 if (data["c_manueel"] != document.getElementById("switch-c").checked) {
                     document.getElementById("switch-c").checked = data["c_manueel"]
                     toggleDevice("c", false)
                 }
+                // kwartiervermogen gewenst aanpassen
                 document.getElementById("kwartiervermogen-slider").value = data["kwartiervermorgen_gewenst"]
-                console.log("kwartiervermogen_gewenst", data["kwartiervermogen_gewenst"])
                 updateKwartiervermogen(data["kwartiervermorgen_gewenst"])
-           
+                // hoogste kwartiervermogen aanpassen
                 document.getElementById("hoogste-kwartiervermogen").textContent = data["hoogste_kwartiervermogen"]
                 
-                console.log("hoogste_kwartiervermogen", data["hoogste_kwartiervermogen"])
                 
+                // Actieve status bijwerken voor A met controle van override
+            if (data["a_manueel"]) {
+                document.getElementById("status-label-a").classList.remove("active");
+                document.getElementById("status-label-a").textContent = "Niet actief";
+            } else {
                 if (data["a_actief"]) {
                     document.getElementById("status-label-a").classList.remove("active");
                     document.getElementById("status-label-a").textContent = "Niet actief";
-                        
                 } else {
                     document.getElementById("status-label-a").classList.add("active");
-                    document.getElementById("status-label-a").textContent = "Actief";        
+                    document.getElementById("status-label-a").textContent = "Actief";
                 }
-                console.log("a_actief", data["a_actief"])
+            }
 
+            // Actieve status bijwerken voor B met controle van override
+            if (data["b_manueel"]) {
+                document.getElementById("status-label-b").classList.remove("active");
+                document.getElementById("status-label-b").textContent = "Niet actief";
+            } else {
                 if (data["b_actief"]) {
                     document.getElementById("status-label-b").classList.remove("active");
                     document.getElementById("status-label-b").textContent = "Niet actief";
@@ -56,8 +67,13 @@ function updateKwartiervermogen(value) {
                     document.getElementById("status-label-b").classList.add("active");
                     document.getElementById("status-label-b").textContent = "Actief";
                 }
-                console.log("b_actief", data["b_actief"])
+            }
 
+            // Actieve status bijwerken voor C met controle van override
+            if (data["c_manueel"]) {
+                document.getElementById("status-label-c").classList.remove("active");
+                document.getElementById("status-label-c").textContent = "Niet actief";
+            } else {
                 if (data["c_actief"]) {
                     document.getElementById("status-label-c").classList.remove("active");
                     document.getElementById("status-label-c").textContent = "Niet actief";
@@ -65,7 +81,7 @@ function updateKwartiervermogen(value) {
                     document.getElementById("status-label-c").classList.add("active");
                     document.getElementById("status-label-c").textContent = "Actief";
                 }
-                console.log("c_actief", data["c_actief"])
+            }
 		 })
             .catch(error => console.error('Error:', error));
     }
@@ -120,6 +136,7 @@ function updateKwartiervermogen(value) {
         }
         if (send) {
             send_info()
+            setTimeout(get_info,200)
         }
     }
 
