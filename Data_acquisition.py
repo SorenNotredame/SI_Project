@@ -33,6 +33,7 @@ debug = False
 obiscodes = {
     "1-0:21.7.0": "Total consumption",
     "1-0:22.7.0": "L1 production",
+    "1-0:1.8.0" : "Total Energy"
     }
 
 # Latest consumption poll
@@ -134,6 +135,7 @@ def parsetelegramline(p1line):
 
 def main():
     global latest_consumption
+    global current_energy
     ser = serial.Serial(serialport, 115200, xonxoff=1)
     p1telegram = bytearray()
     while True:
@@ -171,6 +173,8 @@ def main():
                                 print(f"desc:{r[0]}, val:{r[1]}, u:{r[2]}")
                         if r and r[0] == "Total consumption":
                             latest_consumption = r[1]
+                        elif r and r[0] == "Total energy":
+                            current_energy = r[1]
                     for device in device_list:
                         power = zigbee_controller.power_consumption.get(device)
                         if power is None:
@@ -199,6 +203,10 @@ def get_latest_consumption_poll():
     global latest_consumption
     return latest_consumption
 
+def get_current_energy():
+    global current_energy
+    return current_energy
+
 def prepare_data(values):
     for line in values:
         data = f"Meter {line[0].replace(' ', '_')}={line[1]}"
@@ -216,6 +224,7 @@ def send_to_influxdb(values):
     else:
         print(f"Failed to write to InfluxDB. Status code: {response.status_code}")
 
-""" if __name__ == "__main__":
-    main()
- """
+""" 
+if __name__ == "__main__":
+    main() 
+"""

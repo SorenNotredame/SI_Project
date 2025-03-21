@@ -41,54 +41,29 @@ function updateKwartiervermogen(value) {
                 document.getElementById("hoogste-kwartiervermogen").textContent = data["hoogste_kwartiervermogen"]
                 
                 
-                // Actieve status bijwerken voor A met controle van override
+            // Actieve status bijwerken voor A met controle van override
             if (data["a_manueel"]) {
-                document.getElementById("status-label-a").classList.remove("active");
-                document.getElementById("status-label-a").textContent = "Niet actief";
+                deviceStatuses["a"] = data["a_manueel"]
             } else {
-                if (data["a_actief"]) {
-                    document.getElementById("status-label-a").classList.remove("active");
-                    document.getElementById("status-label-a").textContent = "Niet actief";
-                } else {
-                    document.getElementById("status-label-a").classList.add("active");
-                    document.getElementById("status-label-a").textContent = "Actief";
-                }
+                deviceStatuses["a"] = !data["a_turned_off"]
             }
-
-            // Actieve status bijwerken voor B met controle van override
             if (data["b_manueel"]) {
-                document.getElementById("status-label-b").classList.remove("active");
-                document.getElementById("status-label-b").textContent = "Niet actief";
+                deviceStatuses["b"] = data["b_manueel"]
             } else {
-                if (data["b_actief"]) {
-                    document.getElementById("status-label-b").classList.remove("active");
-                    document.getElementById("status-label-b").textContent = "Niet actief";
-                } else {
-                    document.getElementById("status-label-b").classList.add("active");
-                    document.getElementById("status-label-b").textContent = "Actief";
-                }
+                deviceStatuses["b"] = !data["b_turned_off"]
             }
-
-            // Actieve status bijwerken voor C met controle van override
             if (data["c_manueel"]) {
-                document.getElementById("status-label-c").classList.remove("active");
-                document.getElementById("status-label-c").textContent = "Niet actief";
+                deviceStatuses["c"] = data["c_manueel"]
             } else {
-                if (data["c_actief"]) {
-                    document.getElementById("status-label-c").classList.remove("active");
-                    document.getElementById("status-label-c").textContent = "Niet actief";
-                } else {
-                    document.getElementById("status-label-c").classList.add("active");
-                    document.getElementById("status-label-c").textContent = "Actief";
-                }
+                deviceStatuses["c"] = !data["c_turned_off"]
             }
+            updateDeviceStatus()
 		 })
             .catch(error => console.error('Error:', error));
     }
 
     // Functie om de statuslabels aan te passen
     function updateDeviceStatus() {
-        get_info()
         for (let type in deviceStatuses) {
             let statusLabel = document.getElementById(`status-label-${type}`);
 
@@ -147,7 +122,7 @@ function logout() {
 
 
     // Bij het laden van de pagina de statussen ophalen
-    document.addEventListener("DOMContentLoaded", updateDeviceStatus);
+    document.addEventListener("DOMContentLoaded", get_info);
 
 
 

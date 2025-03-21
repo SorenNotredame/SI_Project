@@ -9,7 +9,7 @@ app = Flask(__name__)
 CORS(app)
 #_manueel == True is dat deze schakelaar aanstaat
 #_actief == True is dat de schakeling aan staat dus apparaat is niet actief indien True
-values = {'kwartiervermorgen_gewenst': '3500', 'a_manueel': False, 'b_manueel': True, 'c_manueel': True, 'hoogste_kwartiervermogen': '3500', 'a_actief': False, "b_actief": False, 'c_actief': False}    
+values = {'kwartiervermorgen_gewenst': '3500', 'a_manueel': False, 'b_manueel': False, 'c_manueel': False, 'hoogste_kwartiervermogen': '3500', 'a_turned_off': True, "b_turned_off": False, 'c_turned_off': False}    
 
 def flask_thread():
     app.run(host="0.0.0.0")
@@ -24,9 +24,9 @@ def peak_thread():
         values['hoogste_kwartiervermogen'] = f"{peak.max_average_power:.2f}"
         print('haloooooooooo')
         print(bool(peak.ATurnOff), bool(peak.BTurnOff), bool(peak.CTurnOff), peak.max_average_power)
-        values['a_actief'] = peak.ATurnOff
-        values['b_actief'] = peak.BTurnOff
-        values['c_actief'] = peak.CTurnOff
+        values['a_turned_off'] = peak.ATurnOff
+        values['b_turned_off'] = peak.BTurnOff
+        values['c_turned_off'] = peak.CTurnOff
 
 flask_th = Thread(target=flask_thread); flask_th.start()
 data_th = Thread(target=data_thread); data_th.start()
