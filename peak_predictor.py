@@ -55,10 +55,8 @@ def update_device_status_with_prediction(average_power):
         BTurnOff = True
     if average_power >= 0.7 * MAX_PEAK and CTurnOff:
         ATurnOff = True
-        time.sleep(20)
     if average_power >= 0.6 * MAX_PEAK:
         CTurnOff = True
-        time.sleep(20)
 
 
 def calculate_average_power():
@@ -68,7 +66,7 @@ def calculate_average_power():
     return 0
 
 def main():
-    global samples, max_average_power, next_cycle, average_power
+    global samples, max_average_power, next_cycle, average_power, ATurnOff, BTurnOff, CTurnOff
 
 
     try:
