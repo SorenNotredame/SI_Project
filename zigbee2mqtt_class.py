@@ -36,6 +36,13 @@ class ZigbeeController:
         self.client.publish(f"zigbee2mqtt/{device_id}/set", json.dumps({"state": "OFF"}))
         print(f"Device {device_id} turned off")
 
+    #Test function. Do not use!!
+    def update_device(self, device_id):
+        self.client.publish(f"zigbee2mqtt/bridge/request/device/ota_update/check", json.dumps({"id": f"{device_id}"}))
+        t.sleep(10)
+        self.client.publish(f"zigbee2mqtt/bridge/request/device/ota_update/update", json.dumps({"id": f"{device_id}"}))
+        print(f"Device {device_id} update check")
+
     def subscribe_to_device(self, device_id):
         self.client.subscribe(f"zigbee2mqtt/{device_id}")
         print(f"Subscribed to power consumption messages for {device_id}")
@@ -47,7 +54,7 @@ class ZigbeeController:
         return self.power_consumption.get(device_id, "Unknown") 
 
 zigbee_controller = ZigbeeController("localhost")
-zigbee_controller.turn_on_device("Type-C")  
+
 """
 # Example usage:
 
