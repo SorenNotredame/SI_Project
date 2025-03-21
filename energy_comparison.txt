@@ -1,0 +1,8 @@
+Energy from Meter (kWh): 14781936.0000
+Energy from Watt Samples (kWh): None
+Energy from Meter (kWh): 14783700.0000
+Energy from Watt Samples (kWh): [487.1212121212121]
+Energy from Meter (kWh): 444.0000
+Energy from Watt Samples (kWh): [487.1212121212121, 448.10738255033556]
+Energy from Meter (kWh): 384.0000
+Energy from Watt Samples (kWh): [487.1212121212121, 448.10738255033556, 393.5685618729097]

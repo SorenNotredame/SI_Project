@@ -1,12 +1,16 @@
 
-function updateKwartiervermogen(value) {
+function updateKwartiervermogen(value, send = true) {
     // Update de waarde op de pagina
     document.getElementById('kwartiervermogen-waarde').innerText = value;
 
     // Update de CSS variabele voor de kleur van de slider
     document.documentElement.style.setProperty('--slider-value', (value - 2500) / (10000 - 2500) * 100 + '%');
-    send_info();
+    if (send){
+        send_info();
+    }
 }
+
+setInterval(get_info, 5000);
 
     let deviceStatuses = {
         a: true,  // Type A is actief
@@ -36,7 +40,7 @@ function updateKwartiervermogen(value) {
                 }
                 // kwartiervermogen gewenst aanpassen
                 document.getElementById("kwartiervermogen-slider").value = data["kwartiervermorgen_gewenst"]
-                updateKwartiervermogen(data["kwartiervermorgen_gewenst"])
+                updateKwartiervermogen(data["kwartiervermorgen_gewenst"], false)
                 // hoogste kwartiervermogen aanpassen
                 document.getElementById("hoogste-kwartiervermogen").textContent = data["hoogste_kwartiervermogen"]
                 

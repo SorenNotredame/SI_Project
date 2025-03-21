@@ -44,7 +44,10 @@ class ZigbeeController:
         return self.device_states.get(device_id, "Unknown")
     
     def get_device_power(self, device_id):
-        return self.power_consumption.get(device_id, "Unknown")   
+        return self.power_consumption.get(device_id, "Unknown") 
+
+zigbee_controller = ZigbeeController("localhost")
+zigbee_controller.turn_on_device("Type-C")  
 """
 # Example usage:
 

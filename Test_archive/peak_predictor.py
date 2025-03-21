@@ -49,17 +49,16 @@ def update_device_status_with_prediction(average_power):
     if predicted_peak < MAX_PEAK:
         CTurnOff = ATurnOff = BTurnOff = False
         return
-    
-    ATurnOff = BTurnOff = CTurnOff = False
 
     # Anders, gebruik de bestaande logica
     if average_power >= 0.8 * MAX_PEAK:
         BTurnOff = True
-    if average_power >= 0.7 * MAX_PEAK:
+    elif average_power >= 0.7 * MAX_PEAK:
         ATurnOff = True
-    if average_power >= 0.6 * MAX_PEAK:
+    elif average_power >= 0.6 * MAX_PEAK:
         CTurnOff = True
-
+    else:
+        CTurnOff = ATurnOff = BTurnOff = False
 
 def calculate_average_power():
     """Bereken het gemiddelde vermogen van de verzamelde samples."""

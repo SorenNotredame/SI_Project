@@ -24,7 +24,8 @@ for device in device_list:
 # clear = lambda: os.system('clear')
 
 # Change your serial port here:
-serialport = '/dev/ttyUSB0'
+#serialport = '/dev/ttyUSB1'
+serialport = '/dev/serial/by-id/usb-FTDI_FT232R_USB_UART_A17E4TYN-if00-port0'
 
 # Enable debug if needed:
 debug = False
@@ -33,11 +34,12 @@ debug = False
 obiscodes = {
     "1-0:21.7.0": "Total consumption",
     "1-0:22.7.0": "L1 production",
-    "1-0:1.8.0" : "Total Energy"
+    "1-0:1.8.1" : "Total energy",
     }
 
 # Latest consumption poll
 latest_consumption = 0
+current_energy = 0
 
 
 def checkcrc(p1telegram):
@@ -88,50 +90,6 @@ def parsetelegramline(p1line):
         return (obiscodes[obis], value, unit)
     else:
         return ()
-
-### Code Frank voor peak_predictor.py
-""" def read_p1_value():
-    ser = serial.Serial(serialport, 115200, xonxoff=1)
-    p1telegram = bytearray()
-    while True:
-        try:
-            # read input from serial port
-            p1line = ser.readline()
-            if debug:
-                print ("Reading: ", p1line.strip())
-            # P1 telegram starts with /
-            # We need to create a new empty telegram
-            if "/" in p1line.decode('ascii'):
-                if debug:
-                    print ("Found beginning of P1 telegram")
-                p1telegram = bytearray()
-                clear()
-                
-            # add line to complete telegram
-            p1telegram.extend(p1line)
-            # P1 telegram ends with ! + CRC16 checksum
-            if "!" in p1line.decode('ascii'):
-                if debug:
-                    print("Found end, printing full telegram")
-                    print('*' * 40)
-                    print(p1telegram.decode('ascii').strip())
-                    print('*' * 40)
-                if checkcrc(p1telegram):
-                    # parse telegram contents, line by line
-                    for line in p1telegram.split(b'\r\n'):
-                        r = parsetelegramline(line.decode('ascii'))
-                        if r and r[0] == "Total consumption":
-                            return r[1]
-        except KeyboardInterrupt:
-            print("Stopping...")
-            ser.close()
-            break
-        except:
-            if debug:
-                print(traceback.format_exc())
-            print ("Something went wrong...")
-            ser.close()
-        ser.flush() """
 
 def main():
     global latest_consumption
@@ -197,7 +155,7 @@ def main():
 
 # Configuration settings
 influxdb_url = "http://localhost:8086/api/v2/write?org=docs&bucket=home"
-api_token = "opbXBXfTUfD8POAT3WYYGtlC2PTbkwx4QwbzIH4tREDTSw1TttqNKTfExafd0opk1Eixx_pK6eD285kjuGSwDw=="
+api_token = "GlTozFU3Jt8xXZ4nlC8-49FFGCF2z1fwYs0qK3nGLI5lo3n1X782Dh3Yvl1HCqDDKq4ViPgZp70BriRgKfrvcg=="
 
 def get_latest_consumption_poll():
     global latest_consumption
@@ -224,7 +182,7 @@ def send_to_influxdb(values):
     else:
         print(f"Failed to write to InfluxDB. Status code: {response.status_code}")
 
-""" 
+
 if __name__ == "__main__":
     main() 
-"""
+
