@@ -50,15 +50,15 @@ def update_device_status_with_prediction(average_power):
         CTurnOff = ATurnOff = BTurnOff = False
         return
     
-    ATurnOff = BTurnOff = CTurnOff = False
-
     # Anders, gebruik de bestaande logica
-    if average_power >= 0.8 * MAX_PEAK:
+    if average_power >= 0.8 * MAX_PEAK and ATurnOff:
         BTurnOff = True
-    if average_power >= 0.7 * MAX_PEAK:
+    if average_power >= 0.7 * MAX_PEAK and CTurnOff:
         ATurnOff = True
+        time.sleep(20)
     if average_power >= 0.6 * MAX_PEAK:
         CTurnOff = True
+        time.sleep(20)
 
 
 def calculate_average_power():
@@ -74,6 +74,7 @@ def main():
     try:
         # Check if it's time to start a new cycle
         if datetime.now() >= next_cycle:
+            ATurnOff = BTurnOff = CTurnOff = False
             if average_power > max_average_power:
                 max_average_power = average_power
             print(f"Starting new cycle at {next_cycle.strftime('%H:%M:%S')}")
