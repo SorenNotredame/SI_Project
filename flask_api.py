@@ -22,12 +22,13 @@ def peak_thread():
     while True:
         peak.main()
         values['hoogste_kwartiervermogen'] = f"{peak.max_average_power:.2f}"
+        print('haloooooooooo')
         print(bool(peak.ATurnOff), bool(peak.BTurnOff), bool(peak.CTurnOff), peak.max_average_power)
         values['a_actief'] = peak.ATurnOff
         values['b_actief'] = peak.BTurnOff
         values['c_actief'] = peak.CTurnOff
 
-flask_th  = Thread(target=flask_thread); flask_th.start()
+flask_th = Thread(target=flask_thread); flask_th.start()
 data_th = Thread(target=data_thread); data_th.start()
 peak_th = Thread(target=peak_thread); peak_th.start()
 
@@ -47,6 +48,7 @@ def get_data():
     values['c_manueel'] = data["c"]
     return "done"
 
-flask_th.join()
+""" flask_th.join()
 data_th.join()
 peak_th.join()
+ """

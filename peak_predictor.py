@@ -74,39 +74,39 @@ def calculate_average_power():
 def main():
     global samples, max_average_power, next_cycle
 
-    while True:
-        try:
-            # Check if it's time to start a new cycle
-            if datetime.now() >= next_cycle:
-                print(f"Starting new cycle at {next_cycle.strftime('%H:%M:%S')}")
-                samples = []  # Reset samples for the new cycle
-                next_cycle = (next_cycle + timedelta(minutes=15)).replace(second=0, microsecond=0)
 
-            # Lees en verwerk de vermogenswaarde
-            value = get_latest_consumption_poll()
-            if value is not None:
-                value_in_watts = value
-                samples.append(value_in_watts)  # Voeg de waarde in Watt toe aan de lijst
-                average_power = calculate_average_power()  # Bereken het gemiddelde vermogen
-                if average_power > max_average_power:
-                    max_average_power = average_power
-                update_device_status_with_prediction(average_power)  # Werk de status van de apparaten bij
-                # Print het gemiddelde vermogen
-                print(f"Current Average Power: {average_power:.2f} W")
-                print(f"CTurnOff: {CTurnOff}, ATurnOff: {ATurnOff}, BTurnOff: {BTurnOff}")
+    try:
+        # Check if it's time to start a new cycle
+        if datetime.now() >= next_cycle:
+            print(f"Starting new cycle at {next_cycle.strftime('%H:%M:%S')}")
+            samples = []  # Reset samples for the new cycle
+            next_cycle = (next_cycle + timedelta(minutes=15)).replace(second=0, microsecond=0)
 
-                # Bereken en print de geschatte kwartierpiek
-                predicted_peak = predict_quarter_peak()
-                print(f"Predicted Quarter Peak: {predicted_peak:.2f} W")
+        # Lees en verwerk de vermogenswaarde
+        value = get_latest_consumption_poll()
+        if value is not None:
+            value_in_watts = value
+            samples.append(value_in_watts)  # Voeg de waarde in Watt toe aan de lijst
+            average_power = calculate_average_power()  # Bereken het gemiddelde vermogen
+            if average_power > max_average_power:
+                max_average_power = average_power
+            update_device_status_with_prediction(average_power)  # Werk de status van de apparaten bij
+            # Print het gemiddelde vermogen
+            print(f"Current Average Power: {average_power:.2f} W")
+            print(f"CTurnOff: {CTurnOff}, ATurnOff: {ATurnOff}, BTurnOff: {BTurnOff}")
 
-            # Sleep for 1 second to simulate sampling every second
-            time.sleep(1)
+            # Bereken en print de geschatte kwartierpiek
+            predicted_peak = predict_quarter_peak()
+            print(f"Predicted Quarter Peak: {predicted_peak:.2f} W")
 
-        except KeyboardInterrupt:
-            print("Stopping...")
-            sys.exit()  # Forcefully exit the script
-        except Exception as e:
-            print(f"Something went wrong: {e}")
+        # Sleep for 1 second to simulate sampling every second
+        time.sleep(1)
 
-if __name__ == '__main__':
-    main()
+    except KeyboardInterrupt:
+        print("Stopping...")
+        sys.exit()  # Forcefully exit the script
+    except Exception as e:
+        print(f"Something went wrong: {e}")
+
+""" if __name__ == '__main__':
+    main() """
