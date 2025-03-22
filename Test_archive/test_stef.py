@@ -27,11 +27,11 @@ class ZigbeeController:
                 print(f"State for {device_id}: {state}")
         except json.JSONDecodeError:
             print("Failed to decode JSON payload")
-    # Use to turn on a device
+
     def turn_on_device(self, device_id):
         self.client.publish(f"zigbee2mqtt/{device_id}/set", json.dumps({"state": "ON"}))
         print(f"Device {device_id} turned on")
-    #Use to turn off a device
+
     def turn_off_device(self, device_id):
         self.client.publish(f"zigbee2mqtt/{device_id}/set", json.dumps({"state": "OFF"}))
         print(f"Device {device_id} turned off")
@@ -42,21 +42,17 @@ class ZigbeeController:
         t.sleep(10)
         self.client.publish(f"zigbee2mqtt/bridge/request/device/ota_update/update", json.dumps({"id": f"{device_id}"}))
         print(f"Device {device_id} update check")
-    #Use to subscribe to the messages of a device. Only needs to be used once!!!! Afterwards use get_device_state or get_device_power to retrieve information
+
     def subscribe_to_device(self, device_id):
         self.client.subscribe(f"zigbee2mqtt/{device_id}")
         print(f"Subscribed to power consumption messages for {device_id}")
-
-    def interview_device(self, device_id):
-        self.client.publish(f"zigbee2mqtt/bridge/request/device/interview", json.dumps({"id": f"{device_id}"}))
-        print(f"Interview request sent for device {device_id}")
 
     def get_device_state(self, device_id):
         return self.device_states.get(device_id, "Unknown")
     
     def get_device_power(self, device_id):
         return self.power_consumption.get(device_id, "Unknown") 
-"""
+
 #zigbee_controller = ZigbeeController("localhost")
 
 
@@ -77,7 +73,7 @@ for device_id in device_list:
     t.sleep(1)
 for device_id in device_list:
     zigbee_controller.turn_on_device(device_id)
-    sleep(1)
+    t.sleep(1)
     print(f"Current power for {device_id}: {zigbee_controller.get_device_power(device_id)}")
     print(f"Current state for {device_id}: {zigbee_controller.get_device_state(device_id)}")
 t.sleep(30)
@@ -103,7 +99,7 @@ for device_id in device_list:
 t.sleep(1)
 for device_id in device_list:
     zigbee_controller.turn_off_device(device_id)
-"""
+    
 """
 # Turn on the device and get its state
 zigbee_controller.turn_on_device(device_id)

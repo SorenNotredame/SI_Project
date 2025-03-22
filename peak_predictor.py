@@ -3,7 +3,7 @@ import time
 from datetime import datetime, timedelta
 from Data_acquisition import get_latest_consumption_poll, get_current_energy
 
-MAX_PEAK = 1500  # Max piekwaarde in Watt
+MAX_PEAK = 400  # Max piekwaarde in Watt
 
 # Variables to track the state
 samples = []
