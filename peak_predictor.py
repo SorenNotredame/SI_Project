@@ -41,7 +41,7 @@ def predict_quarter_peak():
 
 def update_device_status_with_prediction(average_power):
     """Update de status van apparaten met de voorspelling."""
-    global CTurnOff, ATurnOff, BTurnOff, counter
+    global CTurnOff, ATurnOff, BTurnOff, counter, next_cycle
 
     if counter > 0:
         counter -= 1
@@ -50,7 +50,7 @@ def update_device_status_with_prediction(average_power):
     predicted_peak = predict_quarter_peak()
 
     # Als de voorspelling de piekwaarde niet overschrijdt, mag niets uitvallen
-    if predicted_peak < MAX_PEAK:
+    if predicted_peak < MAX_PEAK and not (datetime.now() >= next_cycle - timedelta(minutes=10)):
         return
     
     # Anders, gebruik de bestaande logica

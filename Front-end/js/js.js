@@ -2,9 +2,10 @@
 function updateKwartiervermogen(value, send = true) {
     // Update de waarde op de pagina
     document.getElementById('kwartiervermogen-waarde').innerText = value;
+    minimum = document.getElementById('kwartiervermogen-slider').min
 
     // Update de CSS variabele voor de kleur van de slider
-    document.documentElement.style.setProperty('--slider-value', (value - 2500) / (10000 - 2500) * 100 + '%');
+    document.documentElement.style.setProperty('--slider-value', (value - minimum) / (10000 - minimum) * 100 + '%');
     if (send){
         send_info();
     }
@@ -39,8 +40,17 @@ setInterval(get_info, 5000);
                     toggleDevice("c", false)
                 }
                 // kwartiervermogen gewenst aanpassen
-                document.getElementById("kwartiervermogen-slider").value = data["kwartiervermorgen_gewenst"]
-                updateKwartiervermogen(data["kwartiervermorgen_gewenst"], false)
+                if (data["hoogste_kwartiervermogen"] > 500){
+                    document.getElementById("kwartiervermogen-slider").min = parseInt(data["hoogste_kwartiervermogen"])
+                }
+                if (parseInt(data["hoogste_kwartiervermogen"]) > parseInt(data["kwartiervermorgen_gewenst"])){
+                    document.getElementById("kwartiervermogen-slider").value = data["hoogste_kwartiervermogen"]
+                    updateKwartiervermogen(data["hoogste_kwartiervermogen"], false)
+
+                }else{
+                    document.getElementById("kwartiervermogen-slider").value = data["kwartiervermorgen_gewenst"]
+                    updateKwartiervermogen(data["kwartiervermorgen_gewenst"], false)
+                }                
                 // hoogste kwartiervermogen aanpassen
                 document.getElementById("hoogste-kwartiervermogen").textContent = data["hoogste_kwartiervermogen"]
                 

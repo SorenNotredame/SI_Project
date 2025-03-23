@@ -3,7 +3,7 @@ from zigbee2mqtt_class import ZigbeeController
 
 
 mqtt_broker_address = "localhost"
-device_list = ["Type-A", "Type-B","Type-C"]
+device_list = ["Type-A", "Type-B", "Type-C"]
 
 zigbee_controller = ZigbeeController(mqtt_broker_address)
 device_id_a = "Type-A"

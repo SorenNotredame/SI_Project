@@ -16,6 +16,7 @@ device_id_c = "Type-C"
 for device in device_list:
     zigbee_controller.subscribe_to_device(device)
     zigbee_controller.turn_on_device(device) # To properly make the get_device_state and power function work I here force a first mqtt message.
+    time.sleep(1)
 
 app = Flask(__name__)
 CORS(app)
@@ -36,17 +37,6 @@ def peak_thread():
         peak.main()
         values['hoogste_kwartiervermogen'] = f"{peak.max_average_power:.2f}"
         
-        """
-        if 'zigbee_controller' not in globals():
-            mqtt_broker_address = "localhost"
-            zigbee_controller = ZigbeeController(mqtt_broker_address)
-            device_id_a = "Type-A"
-            zigbee_controller.subscribe_to_device(device_id_a)
-            device_id_b = "Type-B"
-            zigbee_controller.subscribe_to_device(device_id_b)
-            device_id_c = "Type-C"
-            zigbee_controller.subscribe_to_device(device_id_c)
-        """
         for device in device_list:
             print(f"Current state for {device}: {zigbee_controller.get_device_state(device)}")
         values['a_turned_off'] = peak.ATurnOff
