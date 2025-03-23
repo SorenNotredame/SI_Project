@@ -40,11 +40,12 @@ setInterval(get_info, 5000);
                     toggleDevice("c", false)
                 }
                 // kwartiervermogen gewenst aanpassen
+                min_vermogen = Math.ceil(parseInt(data["hoogste_kwartiervermogen"])/100)*100
                 if (data["hoogste_kwartiervermogen"] > 500){
-                    document.getElementById("kwartiervermogen-slider").min = parseInt(data["hoogste_kwartiervermogen"])
+                    document.getElementById("kwartiervermogen-slider").min = min_vermogen
                 }
                 if (parseInt(data["hoogste_kwartiervermogen"]) > parseInt(data["kwartiervermorgen_gewenst"])){
-                    document.getElementById("kwartiervermogen-slider").value = data["hoogste_kwartiervermogen"]
+                    document.getElementById("kwartiervermogen-slider").value = hoogste_kwartiervermogen
                     updateKwartiervermogen(data["hoogste_kwartiervermogen"], false)
 
                 }else{
