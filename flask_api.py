@@ -25,10 +25,9 @@ values = {'kwartiervermorgen_gewenst': '3500', 'a_manueel': False, 'b_manueel': 
 
 def flask_thread():
     app.run(host="0.0.0.0")
-    
 
 def data_thread():
-    Data_acquisition.main()
+    Data_acquisition.main(zigbee_controller, device_list)
 
 def peak_thread():
     peak = peak_predictor
@@ -57,24 +56,23 @@ def peak_thread():
             # Check if the device should be turned OFF
             if peak.ATurnOff:
                 #!!!!!!dit staat gecomment omdat get_device_state geen waarde geeft als dit werk mag dit worden uncomment en geindent
-                """ if zigbee_controller.get_device_state(device_id_a) == "ON": """
-                zigbee_controller.turn_off_device(device_id_a)
-                print(f"{device_id_a} turned OFF due to peak.ATurnOff")
+                if zigbee_controller.get_device_state(device_id_a) == "ON":
+                    zigbee_controller.turn_off_device(device_id_a)
+                    print(f"{device_id_a} turned OFF due to peak.ATurnOff")
 
             # Check if the device should be turned back ON
             else:  # peak.ATurnOff is False
                 #!!!!!!!dit staat gecomment omdat get_device_state geen waarde geeft als dit werk mag dit worden uncomment en geindent
-                """ if zigbee_controller.get_device_state(device_id_a) == "OFF": """
-                zigbee_controller.turn_on_device(device_id_a)
-                print(f"{device_id_a} turned ON as peak.ATurnOff is now False")
-        #!!!!!!!dit staat gecomment omdat get_device_state geen waarde geeft als dit werk mag dit worden uncomment en geindent
-        """ else: 
+                if zigbee_controller.get_device_state(device_id_a) == "OFF":
+                    zigbee_controller.turn_on_device(device_id_a)
+                    print(f"{device_id_a} turned ON as peak.ATurnOff is now False")
+        else: 
             if zigbee_controller.get_device_state(device_id_a) == "OFF":
-                    zigbee_controller.turn_on_device(device_id_a) """
+                zigbee_controller.turn_on_device(device_id_a)
 
         values['b_turned_off'] = peak.BTurnOff
 
-        """ if not values['b_manueel']:
+        if not values['b_manueel']:
             # Check if the device should be turned OFF
             if peak.BTurnOff:
                 if zigbee_controller.get_device_state(device_id_b) == "ON":
@@ -89,14 +87,14 @@ def peak_thread():
                     
         else: 
             if zigbee_controller.get_device_state(device_id_b) == "OFF":
-                zigbee_controller.turn_on_device(device_id_b)"""
+                zigbee_controller.turn_on_device(device_id_b)
 
         values['c_turned_off'] = peak.CTurnOff
 
-        """ if not values['c_manueel']:
+        if not values['c_manueel']:
             # Check if the device should be turned OFF
             if peak.CTurnOff:
-                if zigbee_controller.get_device_state(device_id_c) == "ON":
+                if zigbee_controller.get_device_state(device_id_c) == "ON" :
                     zigbee_controller.turn_off_device(device_id_c)
                     print(f"{device_id_c} turned OFF due to peak.CTurnOff")
 
@@ -107,11 +105,7 @@ def peak_thread():
                     print(f"{device_id_c} turned ON as peak.CTurnOff is now False") 
         else: 
             if zigbee_controller.get_device_state(device_id_c) == "OFF":
-                zigbee_controller.turn_on_device(device_id_c)"""
-
-flask_th = Thread(target=flask_thread); flask_th.start()
-data_th = Thread(target=data_thread); data_th.start()
-peak_th = Thread(target=peak_thread); peak_th.start()
+                zigbee_controller.turn_on_device(device_id_c)
 
 @app.route('/get_values', methods=['GET'])
 def get_values():
@@ -129,7 +123,11 @@ def get_data():
     values['c_manueel'] = data["c"]
     return "done"
 
-""" flask_th.join()
-data_th.join()
-peak_th.join()
- """
+
+
+flask_th = Thread(target=flask_thread)
+data_th = Thread(target=data_thread)
+peak_th = Thread(target=peak_thread) 
+flask_th.start()
+data_th.start()
+peak_th.start()

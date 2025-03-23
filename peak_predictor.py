@@ -51,7 +51,6 @@ def update_device_status_with_prediction(average_power):
 
     # Als de voorspelling de piekwaarde niet overschrijdt, mag niets uitvallen
     if predicted_peak < MAX_PEAK:
-        CTurnOff = ATurnOff = BTurnOff = False
         return
     
     # Anders, gebruik de bestaande logica

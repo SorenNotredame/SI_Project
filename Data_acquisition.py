@@ -11,15 +11,15 @@ from zigbee2mqtt_class import ZigbeeController
 import os
 import traceback # Added by Frank
 
-"""
-# Create the list of Zigbee Devices and subscribe to their power consumption
+
+""" # Create the list of Zigbee Devices and subscribe to their power consumption
 mqtt_broker_address = "localhost"
 device_list= ["Type-A", "Type-B", "Type-C"]
 zigbee_controller = ZigbeeController(mqtt_broker_address)
 # Here we will subscribe to ALL devices to be able to receive their current power and state
 for device in device_list:
-    zigbee_controller.subscribe_to_device(device)"
-"""
+    zigbee_controller.subscribe_to_device(device)
+ """
 
 
 # Create clear function to clear the terminal
@@ -93,7 +93,7 @@ def parsetelegramline(p1line):
     else:
         return ()
 
-def main():
+def main(zigbee_controller, device_list):
     global latest_consumption
     global current_energy
     ser = serial.Serial(serialport, 115200, xonxoff=1)
@@ -180,7 +180,8 @@ def send_to_influxdb(values):
     }
     response = requests.post(influxdb_url, data=values, headers=headers)
     if response.status_code == 204:
-        print(f"Successfully written to InfluxDB.")
+        pass
+        #print(f"Successfully written to InfluxDB.")
     else:
         print(f"Failed to write to InfluxDB. Status code: {response.status_code}")
 
