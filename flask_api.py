@@ -84,7 +84,7 @@ def peak_thread():
         if not values['c_manueel']:
             # Check if the device should be turned OFF
             if peak.CTurnOff:
-                if zigbee_controller.get_device_state(device_id_c) == "ON" :
+                if zigbee_controller.get_device_state(device_id_c) == "ON":
                     zigbee_controller.turn_off_device(device_id_c)
                     print(f"{device_id_c} turned OFF due to peak.CTurnOff")
 

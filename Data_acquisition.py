@@ -24,7 +24,7 @@ debug = False
 
 # Add/update OBIS codes here:
 obiscodes = {
-    "1-0:21.7.0": "Total consumption",
+    "1-0:21.7.0": "Totaal verbruik",
     "1-0:22.7.0": "L1 production",
     "1-0:1.8.1" : "Total energy",
     }
@@ -121,7 +121,7 @@ def main(zigbee_controller, device_list):
                             output.append(r)
                             if debug:
                                 print(f"desc:{r[0]}, val:{r[1]}, u:{r[2]}")
-                        if r and r[0] == "Total consumption":
+                        if r and r[0] == "Totaal verbruik":
                             latest_consumption = r[1]
                         elif r and r[0] == "Total energy":
                             current_energy = r[1]
