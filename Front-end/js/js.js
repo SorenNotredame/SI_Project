@@ -45,8 +45,8 @@ setInterval(get_info, 5000);
                     document.getElementById("kwartiervermogen-slider").min = min_vermogen
                 }
                 if (parseInt(data["hoogste_kwartiervermogen"]) > parseInt(data["kwartiervermorgen_gewenst"])){
-                    document.getElementById("kwartiervermogen-slider").value = hoogste_kwartiervermogen
-                    updateKwartiervermogen(data["hoogste_kwartiervermogen"], false)
+                    document.getElementById("kwartiervermogen-slider").value = min_vermogen
+                    updateKwartiervermogen(min_vermogen, false)
 
                 }else{
                     document.getElementById("kwartiervermogen-slider").value = data["kwartiervermorgen_gewenst"]
